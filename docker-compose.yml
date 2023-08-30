@@ -16,7 +16,7 @@ services:
         networks:
           - postgres
 
-    realmedium-service:
+    realmedium-sample:
         image: ghcr.io/userver-framework/ubuntu-userver-build-base:v1
         privileged: true
         environment:

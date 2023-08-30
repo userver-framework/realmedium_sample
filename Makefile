@@ -82,15 +82,15 @@ install: build-release
 
 # Start targets makefile in docker enviroment
 docker-impl-%:
-	docker-compose run --rm realmedium-service make $*
+	docker-compose run --rm realmedium-sample make $*
 
 # Build and runs service in docker environment
 docker-start-service-debug:
-	@docker-compose run -p 8080:8080 --rm realmedium-service make -- --debug-start-in-docker-debug
+	@docker-compose run -p 8080:8080 --rm realmedium-sample make -- --debug-start-in-docker-debug
 
 # Build and runs service in docker environment
 docker-start-service:
-	@docker-compose run -p 8080:8080 --rm realmedium-service make -- --debug-start-in-docker
+	@docker-compose run -p 8080:8080 --rm realmedium-sample make -- --debug-start-in-docker
 
 # Stop docker container and remove PG data
 docker-clean-data:

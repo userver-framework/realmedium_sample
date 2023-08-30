@@ -6,6 +6,17 @@ CMAKE_OS_FLAGS ?= -DUSERVER_FEATURE_CRYPTOPP_BLAKE2=0 -DUSERVER_FEATURE_REDIS_HI
 NPROCS ?= $(shell nproc)
 CLANG_FORMAT ?= clang-format
 
+ifeq ($(KERNEL),Darwin)
+CMAKE_COMMON_FLAGS += -DUSERVER_NO_WERROR=1 -DUSERVER_CHECK_PACKAGE_VERSIONS=0 \
+  -DUSERVER_DOWNLOAD_PACKAGE_CRYPTOPP=1 \
+  -DOPENSSL_ROOT_DIR=$(shell brew --prefix openssl) \
+  -DUSERVER_PG_INCLUDE_DIR=$(shell pg_config --includedir) \
+  -DUSERVER_PG_LIBRARY_DIR=$(shell pg_config --libdir) \
+  -DUSERVER_PG_SERVER_LIBRARY_DIR=$(shell pg_config --pkglibdir) \
+  -DUSERVER_PG_SERVER_INCLUDE_DIR=$(shell pg_config --includedir-server)
+endif
+
+
 # NOTE: use Makefile.local for customization
 -include Makefile.local
 
@@ -27,17 +38,17 @@ build_release/Makefile:
 
 # build using cmake
 build-impl-%: build_%/Makefile
-	@cmake --build build_$* -j $(NPROCS) --target realmedium
+	@cmake --build build_$* -j $(NPROCS) --target realmedium_sample
 
 # test
 test-impl-%: build-impl-%
-	@cmake --build build_$* -j $(NPROCS) --target realmedium_unittest
+	@cmake --build build_$* -j $(NPROCS) --target realmedium_sample_unittest
 	@cd build_$* && ((test -t 1 && GTEST_COLOR=1 PYTEST_ADDOPTS="--color=yes" ctest -V) || ctest -V)
 	@pep8 tests
 
 # testsuite service runner
 service-impl-start-%: build-impl-%
-	@cd ./build_$* && $(MAKE) start-realmedium
+	@cd ./build_$* && $(MAKE) start-realmedium-sample
 
 # clean
 clean-impl-%:
@@ -59,26 +70,26 @@ format:
 
 install-debug: build-debug
 	@cd build_debug && \
-		cmake --install . -v --component realmedium
+		cmake --install . -v --component realmedium_sample
 
 install: build-release
 	@cd build_release && \
-		cmake --install . -v --component realmedium
+		cmake --install . -v --component realmedium_sample
 
 # Hide target, use only in docker environment
 --debug-start-in-docker: install
 	@ulimit -n 100000
-	@sed -i 's/config_vars.yaml/config_vars.docker.yaml/g' /home/user/.local/etc/realmedium/static_config.yaml
+	@sed -i 's/config_vars.yaml/config_vars.docker.yaml/g' /home/user/.local/etc/realmedium_sample/static_config.yaml
 	@psql 'postgresql://user:password@service-postgres:5432/realmedium_db-1' -f ./postgresql/schemas/db-1.sql
-	@/home/user/.local/bin/realmedium \
-		--config /home/user/.local/etc/realmedium/static_config.yaml
+	@/home/user/.local/bin/realmedium_sample \
+		--config /home/user/.local/etc/realmedium_sample/static_config.yaml
 
 # Hide target, use only in docker environment
 --debug-start-in-docker-debug: install-debug
-	@sed -i 's/config_vars.yaml/config_vars.docker.yaml/g' /home/user/.local/etc/realmedium/static_config.yaml
+	@sed -i 's/config_vars.yaml/config_vars.docker.yaml/g' /home/user/.local/etc/realmedium_sample/static_config.yaml
 	@psql 'postgresql://user:password@service-postgres:5432/realmedium_db-1' -f ./postgresql/schemas/db-1.sql
-	@/home/user/.local/bin/realmedium \
-		--config /home/user/.local/etc/realmedium/static_config.yaml
+	@/home/user/.local/bin/realmedium_sample \
+		--config /home/user/.local/etc/realmedium_sample/static_config.yaml
 
 # Start targets makefile in docker enviroment
 docker-impl-%:

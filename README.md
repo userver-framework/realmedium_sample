@@ -54,28 +54,19 @@ make test-release
 
 ## Authors project:
 
-Manager:
-
+**Manager:**  
 Viktoriia Berkholts <torina4@yandex.ru>
 
 
-Developers:
-
-rumxcola <rumxcola@yandex.ru>
-
-Konstantin Artemev <rumxcola@yandex.ru>
-
-GasikPasik <sarbash2004@gmail.com>
-
-Anna Volkova <anna.mikhaylova09@yandex.ru>
-
-Nikita Semenov <nikitasemenov0388@gmail.com>
-
-Vadim Romanyuk <vadprof10@gmail.com>
-
-artemiev.kk <artemiev.kk@infotek.ru>
+**Developers:**  
+rumxcola <rumxcola@yandex.ru>  
+Konstantin Artemev <rumxcola@yandex.ru>  
+GasikPasik <sarbash2004@gmail.com>  
+Anna Volkova <anna.mikhaylova09@yandex.ru>  
+Nikita Semenov <nikitasemenov0388@gmail.com>  
+Vadim Romanyuk <vadprof10@gmail.com>  
+artemiev.kk <artemiev.kk@infotek.ru>  
 
 
-Maintainer:
-
+**Maintainer:**  
 Alexander Malkov <alexiprof@userver.tech>

@@ -79,7 +79,6 @@ components_manager:
         realmedium-database:
             dbconnection: $dbconnection
             blocking_task_processor: fs-task-processor
-            blocking_cancel_task_processor: fs-task-processor
             dns_resolver: async
             sync-start: true
 

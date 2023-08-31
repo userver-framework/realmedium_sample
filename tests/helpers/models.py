@@ -45,7 +45,7 @@ class Article(BaseModel):
     favoritesCount: int = 0
     author: Optional[Profile] = None
 
-    def __init__(self, *args, profile=None, **kwargs):
+    def __init__(self, profile=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.slug = self.title.lower().replace(' ', '-')
         self.author = profile
@@ -62,7 +62,7 @@ class Comment(BaseModel):
     body: str = Field(default_factory=fake.sentence)
     author: Optional[Profile] = None
 
-    def __init__(self, *args, profile=None, **kwargs):
+    def __init__(self, profile=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.author = profile
 
@@ -70,7 +70,7 @@ class Comment(BaseModel):
 class CommentList(BaseModel):
     comments: List[Comment] = []
 
-    def __init__(self, *args, n=1, profile=None, init_comments=[], **kwargs):
+    def __init__(self, n=1, profile=None, init_comments=[], *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.comments = init_comments + [
             Comment(profile) for i in range(n - len(init_comments))
@@ -81,7 +81,7 @@ class ArticleList(BaseModel):
     articles: List[Article] = []
     articlesCount: int = 0
 
-    def __init__(self, *args, n=1, profile=None, init_articles=[], **kwargs):
+    def __init__(self, n=1, profile=None, init_articles=[], *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.articles = init_articles + [
             Article(profile) for i in range(n - len(init_articles))

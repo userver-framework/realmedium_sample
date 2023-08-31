@@ -50,3 +50,21 @@ make test-release
 * `make docker-start-service-release` - does a `make install-release` and runs service in docker environment
 * `make docker-start-service-debug` - does a `make install-debug` and runs service in docker environment
 * `make docker-clean-data` - stop docker containers and clean database data
+
+
+## Authors project:
+
+Manager:
+Viktoriia Berkholts <torina4@yandex.ru>
+
+Developers:
+rumxcola <rumxcola@yandex.ru>
+Konstantin Artemev <rumxcola@yandex.ru>
+GasikPasik <sarbash2004@gmail.com>
+Anna Volkova <anna.mikhaylova09@yandex.ru>
+Nikita Semenov <nikitasemenov0388@gmail.com>
+Vadim Romanyuk <vadprof10@gmail.com>
+artemiev.kk <artemiev.kk@infotek.ru>
+
+Maintainer:
+Alexander Malkov <alexiprof@userver.tech>

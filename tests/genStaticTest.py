@@ -192,7 +192,7 @@ def fillFavorites(con):
         if curPos + COUNT_FAVORITES > COUNT_OF_ARTICLES:
             curPos = 0
 
-        randArticleIDList = articleIDList[curPos : curPos + COUNT_FAVORITES]
+        randArticleIDList = articleIDList[curPos: curPos + COUNT_FAVORITES]
         curPos += COUNT_FAVORITES
 
         for articleID in randArticleIDList:
@@ -217,7 +217,7 @@ def fillFollowers(con):
         if curPos + COUNT_FOLLOWERS > COUNT_OF_USERS:
             curPos = 0
 
-        randFollowerList = userIDList[curPos : curPos + COUNT_FOLLOWERS]
+        randFollowerList = userIDList[curPos: curPos + COUNT_FOLLOWERS]
         curPos += COUNT_FOLLOWERS
 
         for follower in randFollowerList:

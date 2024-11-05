@@ -66,6 +66,7 @@ jobs:
             run: >-
                 ./local_installation/bin/realmedium_sample
                 --config=./local_installation/etc/realmedium_sample/static_config.yaml
+                --config_vars=./local_installation/etc/realmedium_sample/config_vars.yaml
                 &
 
           - name: Check work run service

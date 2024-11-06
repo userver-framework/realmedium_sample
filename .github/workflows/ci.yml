@@ -15,24 +15,24 @@ jobs:
             fail-fast: false
             matrix:
                 include:
-                  - os: ubuntu-20.04
+                  - os: ubuntu-22.04
                     make: test-debug
-                    info: g++-9 + test-debug
+                    info: g++-11 + test-debug
 
-                  - os: ubuntu-20.04
+                  - os: ubuntu-22.04
                     make: test-release
-                    info: g++-9 + test-release
+                    info: g++-11 + test-release
 
         name: '${{matrix.os}}: ${{matrix.info}}'
         runs-on: ${{matrix.os}}
 
         steps:
-          - uses: actions/checkout@v2
+          - uses: actions/checkout@v4
             with:
                 submodules: true
 
           - name: Reuse ccache directory
-            uses: actions/cache@v2
+            uses: actions/cache@v4
             with:
                 path: ~/.ccache
                 key: '${{matrix.os}} ${{matrix.info}} ccache-dir ${{github.ref}} run-${{github.run_number}}'
@@ -45,11 +45,29 @@ jobs:
                 sudo apt update
                 sudo apt install --allow-downgrades -y postgresql $(cat third_party/userver/scripts/docs/en/deps/${{matrix.os}}.md | tr '\n' ' ')
                 sudo apt install --allow-downgrades -y pep8 $(cat third_party/userver/scripts/docs/en/deps/${{matrix.os}}.md | tr '\n' ' ')
+   
+          - name: Reinstall postgres 14
+            run: |
+                sudo apt purge libpq5 libpq-dev postgresql-*
+                sudo apt install -y postgresql-14 postgresql-client-14 postgresql-server-dev-14
+
 
           - name: Setup ccache
             run: |
                 ccache -M 2.0GB
                 ccache -s
+
+          - name: Run postgresql
+            if: matrix.make == 'test-release'
+            run: |
+                pg_lsclusters
+                sudo -u postgres psql --command="CREATE USER realmedium_sample_user PASSWORD 'password'" --command="\du"
+                sudo -u postgres createdb --owner=realmedium_sample_user realmedium_db-1
+
+          - name: Run migrations
+            if: matrix.make == 'test-release'
+            run: |
+                PGPASSWORD=password psql 'postgresql://realmedium_sample_user@localhost:5432/realmedium_db-1' -f ./postgresql/schemas/db-1.sql
 
           - name: Run ${{matrix.make}}
             run: |
@@ -64,10 +82,10 @@ jobs:
           - name: Test run after install
             if: matrix.make == 'test-release'
             run: >-
-                ./local_installation/bin/realmedium_sample
-                --config=./local_installation/etc/realmedium_sample/static_config.yaml
-                --config_vars=./local_installation/etc/realmedium_sample/config_vars.yaml
-                &
+               ./local_installation/bin/realmedium_sample
+               --config=./local_installation/etc/realmedium_sample/static_config.yaml
+               --config_vars=./local_installation/etc/realmedium_sample/config_vars.yaml
+               &
 
           - name: Check work run service
             if: matrix.make == 'test-release'

@@ -6,5 +6,4 @@ is_testing: false
 
 server-port: 8080
 
-dbconnection: 'postgresql://user:password@localhost:5432/realmedium_db-1'
-
+dbconnection: 'postgresql://realmedium_sample_user:password@localhost:5432/realmedium_db-1'

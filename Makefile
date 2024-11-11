@@ -51,9 +51,12 @@ test-debug test-release: test-%: build-%
 	pycodestyle tests
 
 # Start the service (via testsuite service runner)
-.PHONY: service-start-debug service-start-release
-service-start-debug service-start-release: service-start-%: build-%
+.PHONY: start-debug start-release
+start-debug start-release: start-%: build-%
 	cmake --build build_$* -v --target start-realmedium_sample
+
+.PHONY: service-start-debug service-start-release
+service-start-debug service-start-release: service-start-%: start-%
 
 # Cleanup data
 .PHONY: clean-debug clean-release
@@ -91,9 +94,12 @@ export DB_CONNECTION := postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@servi
 		--config_vars /home/user/.local/etc/realmedium_sample/config_vars.docker.yaml
 
 # Build and run service in docker environment
-.PHONY: docker-start-service-debug docker-start-service-release
-docker-start-service-debug docker-start-service-release: docker-start-service-%:
+.PHONY: docker-start-debug docker-start-release
+docker-start-debug docker-start-release: docker-start-%:
 	$(DOCKER_COMPOSE) run -p 8080:8080 --rm realmedium-sample make -- --in-docker-start-$*
+
+.PHONY: docker-start-service-debug docker-start-service-release
+docker-start-service-debug docker-start-service-release: docker-start-service-%: docker-start-%
 
 # Start targets makefile in docker environment
 .PHONY: docker-cmake-debug docker-build-debug docker-test-debug docker-clean-debug docker-install-debug docker-cmake-release docker-build-release docker-test-release docker-clean-release docker-install-release

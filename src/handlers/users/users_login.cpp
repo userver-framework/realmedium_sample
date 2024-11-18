@@ -45,8 +45,17 @@ class LoginUser final : public userver::server::handlers::HttpHandlerJsonBase {
       return err.GetDetails();
     }
 
+    auto salt = pg_cluster_->Execute(
+        userver::storages::postgres::ClusterHostType::kMaster,
+        sql::kGetSaltByEmail.data(),
+        user_login.email);
+    if (salt.IsEmpty()) {
+      auto& response = request.GetHttpResponse();
+      response.SetStatus(userver::server::http::HttpStatus::kNotFound);
+      return {};
+    }
     auto password_hash =
-        userver::crypto::hash::Sha256(user_login.password.value());
+        userver::crypto::hash::Sha256(user_login.password.value() + salt.AsSingleRow<std::string>());
 
     auto userResult = pg_cluster_->Execute(
         userver::storages::postgres::ClusterHostType::kMaster,

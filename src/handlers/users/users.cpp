@@ -9,6 +9,7 @@
 #include "models/user.hpp"
 #include "utils/errors.hpp"
 #include "utils/make_error.hpp"
+#include "utils/random.hpp"
 #include "validators/validators.hpp"
 
 namespace real_medium::handlers::users::post {
@@ -38,14 +39,15 @@ userver::formats::json::Value RegisterUser::HandleRequestJsonThrow(
     return err.GetDetails();
   }
 
+  auto salt = utils::random::GenerateSalt();
   auto hash_password =
-      userver::crypto::hash::Sha256(user_register.password.value());
+      userver::crypto::hash::Sha256(user_register.password.value() + salt);
   models::User result_user;
   try {
     auto query_result = pg_cluster_->Execute(
         userver::storages::postgres::ClusterHostType::kMaster,
         sql::kInsertUser.data(), user_register.username, user_register.email,
-        hash_password);
+        hash_password, salt);
     result_user = query_result.AsSingleRow<models::User>(
         userver::storages::postgres::kRowTag);
   } catch (const userver::storages::postgres::UniqueViolation& ex) {

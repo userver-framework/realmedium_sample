@@ -19,9 +19,10 @@ struct User final {
   std::optional<std::string> bio;
   std::optional<std::string> image;
   std::string password_hash;
+  std::string salt;
 
   auto Introspect() {
-    return std::tie(id, username, email, bio, image, password_hash);
+    return std::tie(id, username, email, bio, image, password_hash, salt);
   }
 };
 

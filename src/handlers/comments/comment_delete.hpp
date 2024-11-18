@@ -4,6 +4,7 @@
 #include <fmt/format.h>
 #include <string>
 #include <string_view>
+#include <userver/utils/from_string.hpp>
 
 #include "userver/server/handlers/http_handler_base.hpp"
 #include "userver/server/handlers/http_handler_json_base.hpp"

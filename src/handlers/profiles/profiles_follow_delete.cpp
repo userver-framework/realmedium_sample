@@ -8,7 +8,6 @@
 #include "userver/storages/postgres/component.hpp"
 #include "utils/make_error.hpp"
 
-using namespace std;
 using namespace userver::formats;
 using namespace userver::server::http;
 using namespace userver::server::request;

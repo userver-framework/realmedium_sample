@@ -1,7 +1,3 @@
-# yaml
-
-config_vars: @CONFIG_VAR_PATH@
-
 components_manager:
     coro_pool:
         initial_size: 500             # Preallocate 500 coroutines at startup.

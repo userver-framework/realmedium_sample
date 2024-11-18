@@ -14,6 +14,5 @@ userver_testsuite_add(
   PYTEST_ARGS
   --service-config=${CMAKE_SOURCE_DIR}/configs/static_config.yaml
   --service-binary=${CMAKE_BINARY_DIR}/realmedium_sample
-  --config-fallback=${CMAKE_SOURCE_DIR}/configs/dynamic_config_fallback.json
   ${PYTEST_ARGS_CONFIG_VARS}
 )

@@ -9,7 +9,6 @@
 #include "userver/storages/postgres/cluster.hpp"
 #include "userver/storages/postgres/component.hpp"
 
-using namespace std;
 using namespace userver::formats;
 using namespace userver::server::http;
 using namespace userver::server::request;

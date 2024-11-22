@@ -5,8 +5,8 @@
 namespace real_medium::sql {
 
 inline constexpr std::string_view kInsertUser = R"~(
-INSERT INTO real_medium.users(username, email, password_hash)
-VALUES($1, $2, $3)
+INSERT INTO real_medium.users(username, email, password_hash, salt)
+VALUES($1, $2, $3, $4)
 RETURNING *
 )~";
 
@@ -21,7 +21,8 @@ UPDATE real_medium.users SET
   email = COALESCE($3, email),
   bio = COALESCE($4, bio),
   image = COALESCE($5, image),
-  password_hash = COALESCE($6, password_hash)
+  password_hash = COALESCE($6, password_hash),
+  salt = COALESCE($7, salt)
 WHERE user_id = $1
 RETURNING *
 )~";
@@ -109,6 +110,10 @@ SELECT profile.username, profile.bio, profile.image,
          WHERE followed_user_id = profile.user_id AND follower_user_id = $2
        ) THEN true ELSE false END AS following
 FROM profile
+)~";
+
+inline constexpr std::string_view kGetSaltByEmail = R"~(
+SELECT salt FROM real_medium.users WHERE email = $1
 )~";
 
 inline constexpr std::string_view KFollowingUser = R"~(
@@ -235,7 +240,7 @@ SELECT a.article_id AS articleId,
               FROM real_medium.followers fl
               WHERE fl.followed_user_id = a.user_id
        ) AS author_followed_by_user_ids,
-       ROW(u.user_id, u.username, u.email, u.bio, u.image, u.password_hash)::real_medium.user AS author_info
+       ROW(u.user_id, u.username, u.email, u.bio, u.image, u.password_hash, u.salt)::real_medium.user AS author_info
 FROM real_medium.articles a
 JOIN real_medium.users u ON a.user_id = u.user_id
 )~"};
@@ -247,7 +252,7 @@ SELECT c.comment_id,
        c.body,
        c.user_id,
        a.slug,
-       ROW(u.user_id, u.username, u.email, u.bio, u.image, u.password_hash)::real_medium.user AS author_info,
+       ROW(u.user_id, u.username, u.email, u.bio, u.image, u.password_hash, u.salt)::real_medium.user AS author_info,
             ARRAY(
     SELECT follower_user_id
     FROM real_medium.followers fl

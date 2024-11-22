@@ -18,7 +18,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     const userver::formats::json::Value& /*request_json*/,
     userver::server::request::RequestContext& context) const {
   auto user_id = context.GetData<std::optional<std::string>>("id");
-  const auto& comment_id = std::atoi(request.GetPathArg("id").c_str());
+  const auto& comment_id = userver::utils::FromString<int, std::string>(request.GetPathArg("id"));
   const auto& slug = request.GetPathArg("slug");
 
   const auto result_find_comment = pg_cluster_->Execute(

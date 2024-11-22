@@ -4,6 +4,7 @@
 #include "dto/user.hpp"
 #include "models/user.hpp"
 #include "utils/errors.hpp"
+#include "utils/random.hpp"
 #include "validators/validators.hpp"
 namespace real_medium::handlers::users::put {
 
@@ -33,16 +34,18 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   }
 
   std::optional<std::string> password_hash = std::nullopt;
+  std::optional<std::string> salt = std::nullopt;
   if (user_change_data.password) {
+    salt = utils::random::GenerateSalt();
     password_hash =
-        userver::crypto::hash::Sha256(user_change_data.password.value());
+        userver::crypto::hash::Sha256(user_change_data.password.value() + salt.value());
   }
 
   const auto result = pg_cluster_->Execute(
       userver::storages::postgres::ClusterHostType::kMaster,
       sql::kUpdateUser.data(), user_id, user_change_data.username,
       user_change_data.email, user_change_data.bio, user_change_data.image,
-      password_hash);
+      password_hash, salt);
 
   auto user_result_data = result.AsSingleRow<real_medium::models::User>(
       userver::storages::postgres::kRowTag);

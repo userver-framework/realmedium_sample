@@ -97,6 +97,8 @@ add_library(${PROJECT_NAME}_objs OBJECT
 		src/validators/user_validators.cpp
 		src/validators/length_validator.hpp
 		src/validators/length_validator.cpp
+		src/utils/random.hpp
+		src/utils/random.cpp
 		src/utils/errors.hpp
 		src/utils/errors.cpp
 		src/utils/make_error.hpp
@@ -142,7 +144,6 @@ add_google_tests(${PROJECT_NAME}_unittest)
 # Functional Tests
 add_subdirectory(tests)
 
-
 # Install
 include(GNUInstallDirs)
 
@@ -152,11 +153,7 @@ if(DEFINED ENV{PREFIX})
     set(CMAKE_INSTALL_PREFIX ${PREFIX_PATH})
 endif()
 
-set(CONFIG_VAR_PATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_SYSCONFDIR}/${PROJECT_NAME}/config_vars.yaml)
-set(CONFIG_FALLBACK_PATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_SYSCONFDIR}/${PROJECT_NAME}/dynamic_config_fallback.json)
 set(CONFIG_JWT ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_SYSCONFDIR}/${PROJECT_NAME}/jwt_config.json)
-
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/configs/static_config.yaml.in ${CMAKE_CURRENT_SOURCE_DIR}/configs/static_config.yaml)
 
 file(GLOB CONFIGS_FILES ${CMAKE_CURRENT_SOURCE_DIR}/configs/*.yaml ${CMAKE_CURRENT_SOURCE_DIR}/configs/*.json)
 

@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS real_medium.users(
         bio text,
         image varchar(255),
         password_hash varchar(255) NOT NULL,
+        salt varchar(255) NOT NULL,
         CONSTRAINT uniq_username UNIQUE (username),
         CONSTRAINT uniq_email UNIQUE (email)
 );
@@ -77,7 +78,8 @@ CREATE TYPE real_medium.user AS (
         email text,
         bio TEXT,
         image VARCHAR(255),
-        password_hash TEXT
+        password_hash TEXT,
+        salt TEXT
 );
 
 CREATE TYPE real_medium.full_article_info AS (

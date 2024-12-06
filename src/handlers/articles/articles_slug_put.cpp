@@ -1,6 +1,7 @@
+#include <docs/api/api.hpp>
+
 #include "articles_slug_put.hpp"
 #include "db/sql.hpp"
-#include "dto/article.hpp"
 #include "models/article.hpp"
 #include "utils/errors.hpp"
 #include "utils/slugify.hpp"
@@ -20,10 +21,10 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     const userver::formats::json::Value& request_json,
     userver::server::request::RequestContext& context) const {
   auto slug = request.GetPathArg("slug");
-  real_medium::dto::UpdateArticleRequest updateRequest;
+  handlers::UpdateArticleRequest updateRequest =
+          request_json["article"].As<handlers::UpdateArticleRequest>();
   try {
-    updateRequest = real_medium::dto::UpdateArticleRequest::Parse(
-        request_json["article"], request);
+      validator::validate(updateRequest);
   } catch (const real_medium::utils::error::ValidationException& ex) {
     request.SetResponseStatus(
         userver::server::http::HttpStatus::kUnprocessableEntity);

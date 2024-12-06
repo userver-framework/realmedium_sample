@@ -3,9 +3,9 @@
 #include "users.hpp"
 
 #include <userver/crypto/hash.hpp>
+#include <docs/api/api.hpp>
 
 #include "db/sql.hpp"
-#include "dto/user.hpp"
 #include "models/user.hpp"
 #include "utils/errors.hpp"
 #include "utils/make_error.hpp"
@@ -27,8 +27,8 @@ userver::formats::json::Value RegisterUser::HandleRequestJsonThrow(
     const userver::server::http::HttpRequest& request,
     const userver::formats::json::Value& request_json,
     userver::server::request::RequestContext& context) const {
-  dto::UserRegistrationDTO user_register =
-      request_json["user"].As<dto::UserRegistrationDTO>();
+  handlers::UserRegistrationDTO user_register =
+      request_json["user"].As<handlers::UserRegistrationDTO>();
   ;
 
   try {

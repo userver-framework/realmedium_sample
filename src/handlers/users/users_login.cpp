@@ -7,9 +7,9 @@
 #include <userver/server/http/http_status.hpp>
 #include <userver/storages/postgres/cluster.hpp>
 #include <userver/storages/postgres/component.hpp>
+#include <docs/api/api.hpp>
 
 #include "db/sql.hpp"
-#include "dto/user.hpp"
 #include "models/user.hpp"
 #include "utils/errors.hpp"
 #include "validators/validators.hpp"
@@ -34,7 +34,7 @@ class LoginUser final : public userver::server::handlers::HttpHandlerJsonBase {
       const userver::server::http::HttpRequest& request,
       const userver::formats::json::Value& request_json,
       userver::server::request::RequestContext&) const override {
-    dto::UserLoginDTO user_login = request_json["user"].As<dto::UserLoginDTO>();
+    auto&& user_login = request_json["user"].As<UserLoginDTO>();
     ;
 
     try {

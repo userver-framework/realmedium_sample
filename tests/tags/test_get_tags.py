@@ -23,8 +23,8 @@ async def test_get_tags(service_client):
     for article in articleList.articles:
         response = await create_article(service_client, article, user_token)
         assert response.status == HTTPStatus.OK
-        print(article.tagList)
-        tags |= set(article.tagList)
+        print(article.tags)
+        tags |= set(article.tags)
 
     response = await get_tags(service_client)
     assert response.status == HTTPStatus.OK

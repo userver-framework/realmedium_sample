@@ -1,21 +1,19 @@
 #pragma once
 
-#include "dto/article.hpp"
-#include "dto/comment.hpp"
-#include "dto/user.hpp"
+#include <docs/api/api.hpp>
 
 namespace real_medium::validator {
 
-void validate(const dto::UserLoginDTO& dto);
+void validate(const handlers::UserLoginDTO& dto);
 
-void validate(const dto::UserRegistrationDTO& dto);
+void validate(const handlers::UserRegistrationDTO& dto);
 
-void validate(const dto::UserUpdateDTO& dto);
+void validate(const handlers::UserUpdateDTO& dto);
 
-void validate(const dto::AddComment& dto);
+void validate(const handlers::AddComment& dto);
 
-void validate(const dto::CreateArticleRequest& dto);
+void validate(const handlers::CreateArticleRequest& dto);
 
-void validate(const dto::UpdateArticleRequest& dto);
+void validate(const handlers::UpdateArticleRequest& dto);
 
 }  // namespace real_medium::validator

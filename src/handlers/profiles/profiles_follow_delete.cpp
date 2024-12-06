@@ -61,7 +61,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
       res_unfollowing.AsSingleRow<real_medium::models::Profile>(
           userver::storages::postgres::kRowTag);
 
-  if (profile.isFollowing) {
+  if (profile.following) {
     auto& response = request.GetHttpResponse();
     response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
     return utils::error::MakeError("user_id", "has already unfollowed");

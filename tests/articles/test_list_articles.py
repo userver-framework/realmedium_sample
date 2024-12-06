@@ -29,8 +29,8 @@ async def test_list_articles_unauthorized(service_client):
 
     tag = 'huba-buba'
     article_lst = ArticleList(5, author_profile)
-    article_lst.articles[3].tagList.append(tag)
-    article_lst.articles[4].tagList.append(tag)
+    article_lst.articles[3].tags.append(tag)
+    article_lst.articles[4].tags.append(tag)
     for article in article_lst.articles:
         response = await create_article(service_client, article, author_token)
         assert response.status == HTTPStatus.OK
@@ -89,8 +89,8 @@ async def test_list_articles(service_client):
 
     tag = 'huba-buba'
     article_lst = ArticleList(5, author_profile)
-    article_lst.articles[3].tagList.append(tag)
-    article_lst.articles[4].tagList.append(tag)
+    article_lst.articles[3].tags.append(tag)
+    article_lst.articles[4].tags.append(tag)
     for article in article_lst.articles:
         response = await create_article(service_client, article, author_token)
         assert response.status == HTTPStatus.OK

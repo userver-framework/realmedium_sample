@@ -12,7 +12,7 @@ userver::formats::json::Value Serialize(
   item["title"] = article.title;
   item["description"] = article.description;
   item["body"] = article.body;
-  item["tagList"] = article.tags;
+  item["tags"] = article.tags;
   item["createdAt"] = article.createdAt;
   item["updatedAt"] = article.updatedAt;
   item["favorited"] = article.isFavorited;

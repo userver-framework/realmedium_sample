@@ -122,7 +122,7 @@ CREATE TYPE real_medium.tagged_article_with_author_profile AS (
         description TEXT,
         created_at TIMESTAMP WITH TIME ZONE,
         updated_at TIMESTAMP WITH TIME ZONE,
-        tagList VARCHAR(255)[],
+        tags VARCHAR(255)[],
         favorited BOOL,
         favorites_count BIGINT,
         author real_medium.profile);

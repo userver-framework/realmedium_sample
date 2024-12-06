@@ -24,7 +24,7 @@ UTEST(UserValidation, UsernameValidation) {
 }
 
 UTEST(UserValidation, LoginValidation) {
-  using real_medium::dto::UserLoginDTO;
+  using real_medium::handlers::UserLoginDTO;
 
   UEXPECT_NO_THROW(validate(UserLoginDTO{"kek@lol.ru", "keklol"}));
   UEXPECT_THROW(validate(UserLoginDTO{std::nullopt, "keklol"}),
@@ -34,7 +34,7 @@ UTEST(UserValidation, LoginValidation) {
 }
 
 UTEST(UserValidation, RegisterValidation) {
-  using real_medium::dto::UserRegistrationDTO;
+  using real_medium::handlers::UserRegistrationDTO;
 
   UEXPECT_NO_THROW(
       validate(UserRegistrationDTO{"kek", "kek@lol.ru", "keklol"}));
@@ -49,7 +49,7 @@ UTEST(UserValidation, RegisterValidation) {
 }
 
 UTEST(CommentValidation, CreateCommentValidation) {
-  using real_medium::dto::AddComment;
+  using real_medium::handlers::AddComment;
 
   UEXPECT_NO_THROW(validate(AddComment{"some body"}));
   UEXPECT_THROW(validate(AddComment{std::nullopt}), ValidationException);
@@ -57,7 +57,7 @@ UTEST(CommentValidation, CreateCommentValidation) {
 }
 
 UTEST(ArticleValidation, CreateArticleValidation) {
-  using real_medium::dto::CreateArticleRequest;
+  using real_medium::handlers::CreateArticleRequest;
 
   UEXPECT_NO_THROW(validate(
       CreateArticleRequest{"title", "description", "some body", std::nullopt}));
@@ -86,7 +86,7 @@ UTEST(ArticleValidation, CreateArticleValidation) {
 }
 
 UTEST(ArticleValidation, UpdateArticleValidation) {
-  using real_medium::dto::UpdateArticleRequest;
+  using real_medium::handlers::UpdateArticleRequest;
 
   UEXPECT_NO_THROW(
       validate(UpdateArticleRequest{"title", "description", "some body"}));

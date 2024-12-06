@@ -17,7 +17,7 @@ Article Article::Parse(const models::TaggedArticleWithProfile& model) {
   article.profile.bio = model.authorProfile.bio;
   article.profile.image = model.authorProfile.image;
   article.profile.username = model.authorProfile.username;
-  article.profile.isFollowing = model.authorProfile.isFollowing;
+  article.profile.following = model.authorProfile.following;
   return article;
 }
 
@@ -41,29 +41,11 @@ Article Article::Parse(const models::FullArticleInfo& model,
   article.profile.bio = model.authorInfo.bio;
   article.profile.image = model.authorInfo.image;
   article.profile.username = model.authorInfo.username;
-  article.profile.isFollowing =
+  article.profile.following =
       authUserId ? model.authorFollowedByUsersIds.find(authUserId.value()) !=
                        model.authorFollowedByUsersIds.end()
                  : false;
   return article;
-}
-
-CreateArticleRequest CreateArticleRequest::Parse(
-    const userver::formats::json::Value& json) {
-  return CreateArticleRequest{
-      json["title"].As<std::optional<std::string>>(),
-      json["description"].As<std::optional<std::string>>(),
-      json["body"].As<std::optional<std::string>>(),
-      json["tagList"].As<std::optional<std::vector<std::string>>>()};
-}
-
-UpdateArticleRequest UpdateArticleRequest::Parse(
-    const userver::formats::json::Value& json,
-    const userver::server::http::HttpRequest& request) {
-  return UpdateArticleRequest{
-      json["title"].As<std::optional<std::string>>(),
-      json["description"].As<std::optional<std::string>>(),
-      json["body"].As<std::optional<std::string>>()};
 }
 
 userver::formats::json::Value Serialize(
@@ -74,11 +56,11 @@ userver::formats::json::Value Serialize(
   builder["title"] = article.title;
   builder["description"] = article.description;
   builder["body"] = article.body;
-  builder["tagList"] = userver::formats::common::Type::kArray;
+  builder["tags"] = userver::formats::common::Type::kArray;
   if (article.tags) {
     std::for_each(
         article.tags->begin(), article.tags->end(),
-        [&builder](const auto& tag) { builder["tagList"].PushBack(tag); });
+        [&builder](const auto& tag) { builder["tags"].PushBack(tag); });
   }
   builder["createdAt"] = article.createdAt;
   builder["updatedAt"] = article.updatedAt;

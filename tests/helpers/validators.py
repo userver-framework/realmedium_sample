@@ -29,13 +29,13 @@ def validate_article(article, response):
 
 
 def validate_article_json(article, response_json):
-    response_json['tagList'] = set(response_json['tagList'])
+    response_json['tags'] = set(response_json['tags'])
     return response_json == {
         'slug': article.slug,
         'title': article.title,
         'description': article.description,
         'body': article.body,
-        'tagList': set(article.tagList),
+        'tags': set(article.tags),
         'createdAt': matching.datetime_string,
         'updatedAt': matching.datetime_string,
         'favorited': article.favorited,
@@ -81,5 +81,5 @@ def validate_comments(commentList, response):
     return True
 
 
-def validate_tags(tagList, response):
-    return set(response.json()['tags']) == tagList
+def validate_tags(tags, response):
+    return set(response.json()['tags']) == tags

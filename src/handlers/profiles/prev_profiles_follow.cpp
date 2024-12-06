@@ -8,6 +8,7 @@
 #include "userver/server/handlers/http_handler_base.hpp"
 #include "userver/storages/postgres/cluster.hpp"
 #include "userver/storages/postgres/component.hpp"
+#include <docs/api/api.hpp>
 
 using namespace userver::formats;
 using namespace userver::server::http;
@@ -28,14 +29,23 @@ namespace real_medium::handlers::profiles::post {
             const userver::server::http::HttpRequest& request,
             const userver::formats::json::Value&,
             userver::server::request::RequestContext& context) const {
-        auto user_id = context.GetData<std::optional<std::string>>("id");
-        const auto& username = request.GetPathArg("username");
-        if (username.empty()) {
+        auto request_json = userver::formats::json::FromString(request.RequestBody());
+        auto&& request_data = request_json.As<ProfilesFollowRequestBody>();
+
+        if (!request_data.username.has_value()) {
             auto& response = request.GetHttpResponse();
             response.SetStatus(userver::server::http::HttpStatus::kNotFound);
             return utils::error::MakeError("username", "It is null.");
         }
 
+        if (!request_data.id.has_value()) {
+            auto& response = request.GetHttpResponse();
+            response.SetStatus(userver::server::http::HttpStatus::kNotFound);
+            return utils::error::MakeError("id", "It is null.");
+        }
+
+        auto user_id = request_data.id.value();
+        const auto& username = request_data.username.value();
         const auto res_find_id_username =
                 pg_cluster_->Execute(userver::storages::postgres::ClusterHostType::kSlave,
                                      sql::kFindUserIDByUsername.data(), username);

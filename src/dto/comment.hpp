@@ -18,15 +18,8 @@ struct Comment final {
   userver::storages::postgres::TimePointTz createdAt;
   userver::storages::postgres::TimePointTz updatedAt;
   std::string body;
-  Profile author;
+  dto::Profile author;
 };
-
-struct AddComment {
-  std::optional<std::string> body;
-};
-
-AddComment Parse(const userver::formats::json::Value& json,
-                 userver::formats::parse::To<AddComment>);
 
 userver::formats::json::Value Serialize(
     const Comment& comment,

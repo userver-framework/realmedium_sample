@@ -22,24 +22,7 @@ struct Article final {
   userver::storages::postgres::TimePointTz updatedAt;
   std::int64_t favoritesCount{};
   bool isFavorited{false};
-  Profile profile;
-};
-
-struct CreateArticleRequest final {
-  static CreateArticleRequest Parse(const userver::formats::json::Value& json);
-  std::optional<std::string> title;
-  std::optional<std::string> description;
-  std::optional<std::string> body;
-  std::optional<std::vector<std::string>> tags;
-};
-
-struct UpdateArticleRequest final {
-  static UpdateArticleRequest Parse(
-      const userver::formats::json::Value& json,
-      const userver::server::http::HttpRequest& request);
-  std::optional<std::string> title;
-  std::optional<std::string> description;
-  std::optional<std::string> body;
+  dto::Profile profile;
 };
 
 userver::formats::json::Value Serialize(

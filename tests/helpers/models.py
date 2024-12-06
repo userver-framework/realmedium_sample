@@ -40,7 +40,7 @@ class Article(BaseModel):
     title: str = Field(default_factory=generate_title)
     description: str = Field(default_factory=fake.sentence)
     body: str = Field(default_factory=fake.paragraph)
-    tagList: list = Field(default_factory=fake.words)
+    tags: list = Field(default_factory=fake.words)
     favorited: bool = False
     favoritesCount: int = 0
     author: Optional[Profile] = None

@@ -3,9 +3,10 @@
 #include "user_validators.hpp"
 #include "utils/errors.hpp"
 
+
 namespace real_medium::validator {
 
-void validate(const dto::UserLoginDTO& dto) {
+void validate(const handlers::UserLoginDTO& dto) {
   if (!dto.email) {
     throw utils::error::ValidationException("email", "Field is missing");
   } else if (!ValidateEmail(dto.email.value())) {
@@ -19,7 +20,7 @@ void validate(const dto::UserLoginDTO& dto) {
   }
 }
 
-void validate(const dto::UserRegistrationDTO& dto) {
+void validate(const handlers::UserRegistrationDTO& dto) {
   if (!dto.username) {
     throw utils::error::ValidationException("username", "Field is missing");
   } else if (!ValidateUsername(dto.username.value())) {
@@ -38,7 +39,7 @@ void validate(const dto::UserRegistrationDTO& dto) {
     throw utils::error::ValidationException("password", "Invalid value");
   }
 }
-void validate(const dto::UserUpdateDTO& dto) {
+void validate(const handlers::UserUpdateDTO& dto) {
   if (dto.username && !ValidateUsername(dto.username.value())) {
     throw utils::error::ValidationException("username", "Invalid field");
   }
@@ -51,7 +52,7 @@ void validate(const dto::UserUpdateDTO& dto) {
     throw utils::error::ValidationException("password", "Invalid field");
   }
 }
-void validate(const dto::AddComment& dto) {
+void validate(const handlers::AddComment& dto) {
   if (!dto.body) {
     throw utils::error::ValidationException("body", "Field is missing");
   }
@@ -61,7 +62,7 @@ void validate(const dto::AddComment& dto) {
   }
 }
 
-void validate(const dto::CreateArticleRequest& dto) {
+void validate(const handlers::CreateArticleRequest& dto) {
   if (!dto.title) {
     throw utils::error::ValidationException("title", "Field is missing");
   } else {
@@ -84,7 +85,7 @@ void validate(const dto::CreateArticleRequest& dto) {
     ValidateTags(dto.tags.value());
   }
 }
-void validate(const dto::UpdateArticleRequest& dto) {
+void validate(const handlers::UpdateArticleRequest& dto) {
   if (dto.title) {
     ValidateTitle(dto.title.value());
   }

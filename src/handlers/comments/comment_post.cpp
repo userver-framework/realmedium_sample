@@ -1,8 +1,9 @@
+#include <docs/api/api.hpp>
 
 #include "comment_post.hpp"
 #include "db/sql.hpp"
-#include "dto/comment.hpp"
 #include "models/comment.hpp"
+#include <dto/comment.hpp>
 
 #include "utils/errors.hpp"
 #include "utils/make_error.hpp"
@@ -23,10 +24,9 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     const userver::formats::json::Value& request_json,
     userver::server::request::RequestContext& context) const {
   auto user_id = context.GetData<std::optional<std::string>>("id");
-
   const auto comment_json =
       userver::formats::json::FromString(request.RequestBody())["comment"]
-          .As<dto::AddComment>();
+          .As<handlers::AddComment>();
 
   try {
     validator::validate(comment_json);

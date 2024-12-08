@@ -1,8 +1,8 @@
 #include "articles_post.hpp"
 #include <userver/logging/log.hpp>
+#include <docs/api/api.hpp>
 
 #include "../../db/sql.hpp"
-#include "../../dto/article.hpp"
 #include "../../models/article.hpp"
 #include "../../utils/errors.hpp"
 #include "../../utils/slugify.hpp"
@@ -21,9 +21,8 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     const userver::server::http::HttpRequest& request,
     const userver::formats::json::Value& request_json,
     userver::server::request::RequestContext& context) const {
-  dto::CreateArticleRequest createArticleRequest;
-  createArticleRequest =
-      dto::CreateArticleRequest::Parse(request_json["article"]);
+  handlers::CreateArticleRequest createArticleRequest =
+          request_json["article"].As<handlers::CreateArticleRequest>();
   try {
     validator::validate(createArticleRequest);
   } catch (const real_medium::utils::error::ValidationException& ex) {

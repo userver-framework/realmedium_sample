@@ -1,7 +1,7 @@
 #include "profiles.hpp"
 #include <string>
+#include <docs/api/api.hpp>
 #include "db/sql.hpp"
-#include "dto/profile.hpp"
 #include "models/profile.hpp"
 #include "utils/make_error.hpp"
 
@@ -14,7 +14,6 @@ using namespace userver::formats;
 using namespace userver::server::http;
 using namespace userver::server::request;
 using namespace userver::storages::postgres;
-using namespace real_medium::dto;
 
 namespace real_medium::handlers::profiles::get {
 
@@ -31,7 +30,6 @@ json::Value Handler::HandleRequestJsonThrow(const HttpRequest& request,
                                             RequestContext& context) const {
   auto user_id = context.GetData<std::optional<std::string>>("id");
   const auto& username = request.GetPathArg("username");
-
   auto res =
       cluster_->Execute(ClusterHostType::kMaster,
                         sql::kGetProfileByUsername.data(), username, user_id);

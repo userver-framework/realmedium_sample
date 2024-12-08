@@ -14,8 +14,8 @@ struct Profile final {
   std::string username;
   std::optional<std::string> bio;
   std::optional<std::string> image;
-  bool isFollowing{false};
-  auto Introspect() { return std::tie(username, bio, image, isFollowing); }
+  bool following{false};
+  auto Introspect() { return std::tie(username, bio, image, following); }
 };
 
 userver::formats::json::Value Serialize(

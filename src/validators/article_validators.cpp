@@ -26,7 +26,7 @@ void ValidateTags(const std::vector<std::string>& tags) {
   static constexpr std::size_t MAX_TAG_NAME_LEN = 256;
 
   for (const auto& tag : tags) {
-    CheckLength(tag, "tagList", MIN_TAG_NAME_LEN, MAX_TAG_NAME_LEN);
+    CheckLength(tag, "tags", MIN_TAG_NAME_LEN, MAX_TAG_NAME_LEN);
   }
 }
 

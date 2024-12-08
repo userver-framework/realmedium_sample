@@ -16,7 +16,7 @@ userver::formats::json::Value Serialize(
   else
     builder["image"] = userver::formats::common::Type::kNull;
   ;
-  builder["following"] = data.isFollowing;
+  builder["following"] = data.following;
   return builder.ExtractValue();
 }
 

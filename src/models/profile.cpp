@@ -11,7 +11,7 @@ userver::formats::json::Value Serialize(
   item["username"] = profile.username;
   item["bio"] = profile.bio;
   item["image"] = profile.image;
-  item["following"] = profile.isFollowing;
+  item["following"] = profile.following;
 
   return item.ExtractValue();
 }

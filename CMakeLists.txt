@@ -3,7 +3,7 @@ project(realmedium_sample CXX)
 
 
 # Adding userver dependency
-find_package(userver COMPONENTS core postgresql QUIET)
+find_package(userver COMPONENTS core postgresql chaotic QUIET)
 if(NOT userver_FOUND)  # Fallback to subdirectory usage
     # Enable userver libraries that are needed in this project
     set(USERVER_FEATURE_POSTGRESQL ON CACHE BOOL "" FORCE)
@@ -79,8 +79,6 @@ add_library(${PROJECT_NAME}_objs OBJECT
 		src/dto/article.hpp
 		src/dto/profile.cpp
 		src/dto/profile.hpp
-		src/dto/user.hpp
-		src/dto/user.cpp
 		src/dto/comment.hpp
 		src/dto/comment.cpp
 		src/db/sql.hpp
@@ -119,6 +117,22 @@ add_library(${PROJECT_NAME}_objs OBJECT
 
 include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::core userver::postgresql)
+
+file(GLOB_RECURSE SCHEMAS ${CMAKE_CURRENT_SOURCE_DIR}/docs/*.yaml)
+userver_target_generate_chaotic(${PROJECT_NAME}-chgen
+    ARGS
+        -n "/components/schemas/([^/]*)/=real_medium::handlers::{0}"
+        -f "(.*)={0}"
+        --clang-format=
+        --generate-serializers
+    OUTPUT_DIR
+        ${CMAKE_CURRENT_BINARY_DIR}/src
+    SCHEMAS
+        ${SCHEMAS}
+    RELATIVE_TO
+        ${CMAKE_CURRENT_SOURCE_DIR}
+)
+target_link_libraries(${PROJECT_NAME}_objs PUBLIC ${PROJECT_NAME}-chgen)
 
 target_include_directories(${PROJECT_NAME}_objs PUBLIC cpp-jwt)
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC cpp-jwt)

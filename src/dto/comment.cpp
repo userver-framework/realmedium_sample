@@ -12,7 +12,7 @@ Comment Comment::Parse(const real_medium::models::CachedComment& cachedComment,
   comment.author.username = cachedComment.author.username;
   comment.author.bio = cachedComment.author.bio;
   comment.author.image = cachedComment.author.image;
-  comment.author.isFollowing =
+  comment.author.following =
       !userId.has_value() ? false : cachedComment.following.count(*userId);
   return comment;
 }
@@ -29,11 +29,6 @@ userver::formats::json::Value Serialize(
   item["author"] = comment.author;
 
   return item.ExtractValue();
-}
-
-AddComment Parse(const userver::formats::json::Value& json,
-                 userver::formats::parse::To<AddComment>) {
-  return AddComment{json["body"].As<std::optional<std::string>>()};
 }
 
 }  // namespace real_medium::dto

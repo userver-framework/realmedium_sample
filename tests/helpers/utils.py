@@ -34,7 +34,7 @@ class Routes(str, Enum):
 class RequiredFields(tuple, Enum):
     LOGIN = 'email', 'password'
     REGISTRATION = 'username', 'email', 'password'
-    CREATE_ARTICLE = 'title', 'description', 'body', 'tagList'
+    CREATE_ARTICLE = 'title', 'description', 'body', 'tags'
     UPDATE_ARTICLE = 'title', 'description', 'body'
     ADD_COMMENT = 'body'
 

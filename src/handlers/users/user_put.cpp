@@ -1,7 +1,7 @@
 #include "user_put.hpp"
 #include <userver/crypto/hash.hpp>
+#include <docs/api/api.hpp>
 #include "db/sql.hpp"
-#include "dto/user.hpp"
 #include "models/user.hpp"
 #include "utils/errors.hpp"
 #include "utils/random.hpp"
@@ -22,8 +22,8 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     userver::server::request::RequestContext& context) const {
   auto user_id = context.GetData<std::optional<std::string>>("id");
 
-  dto::UserUpdateDTO user_change_data =
-      request_json["user"].As<dto::UserUpdateDTO>();
+  handlers::UserUpdateDTO user_change_data =
+      request_json["user"].As<handlers::UserUpdateDTO>();
 
   try {
     validator::validate(user_change_data);

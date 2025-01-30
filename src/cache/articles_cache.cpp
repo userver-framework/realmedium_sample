@@ -37,7 +37,7 @@ ArticlesCacheContainer::ArticlePtr ArticlesCacheContainer::findArticleBySlug(
 
 std::vector<ArticlesCacheContainer::ArticlePtr>
 ArticlesCacheContainer::getRecent(
-    real_medium::dto::ArticleFilterDTO& filter) const {
+    real_medium::handlers::ArticleFilterDTO& filter) const {
   std::vector<ArticlePtr> articles;
   int offset = 0;
   for (const auto& it : recentArticles_) {
@@ -64,7 +64,7 @@ ArticlesCacheContainer::getRecent(
   return articles;
 }
 std::vector<ArticlesCacheContainer::ArticlePtr> ArticlesCacheContainer::getFeed(
-    real_medium::dto::FeedArticleFilterDTO& filter, UserId authId) const {
+    real_medium::handlers::FeedArticleFilterDTO& filter, UserId authId) const {
   auto followedArticlesUMap = articlesByFollower_.find(authId);
   if (followedArticlesUMap == articlesByFollower_.end()) return {};
 

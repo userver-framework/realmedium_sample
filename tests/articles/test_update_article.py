@@ -11,7 +11,7 @@ from validators import validate_article
 
 
 async def test_update_article_unauthorized(service_client):
-    user = User(bio=None, image=None)
+    user = User()
     response = await register_user(service_client, user)
     assert response.status == HTTPStatus.OK
 
@@ -28,7 +28,7 @@ async def test_update_article_unauthorized(service_client):
 
 
 async def test_update_unknown_article(service_client):
-    user = User(bio=None, image=None)
+    user = User()
     response = await register_user(service_client, user)
     assert response.status == HTTPStatus.OK
 
@@ -40,7 +40,7 @@ async def test_update_unknown_article(service_client):
 
 
 async def test_update_article(service_client):
-    user = User(bio=None, image=None)
+    user = User()
     response = await register_user(service_client, user)
     assert response.status == HTTPStatus.OK
 
@@ -58,7 +58,7 @@ async def test_update_article(service_client):
 
 
 async def test_invalid_access_update_article(service_client):
-    user = User(bio=None, image=None)
+    user = User()
     response = await register_user(service_client, user)
     assert response.status == HTTPStatus.OK
 
@@ -68,7 +68,7 @@ async def test_invalid_access_update_article(service_client):
     )
     assert response.status == HTTPStatus.OK
 
-    another_user = User(bio=None, image=None)
+    another_user = User()
     response = await register_user(service_client, another_user)
     assert response.status == HTTPStatus.OK
 

@@ -8,113 +8,219 @@ servers:
     description: local
     
 paths:
-#  /api/profiles/{username}:
-#    get:
-#      description: Get user profile
-
-#  /api/profiles/{username}/follow:
-#    post:
-#      description: Follow user
-#    delete:
-#      description: Unfollow user
-
-  /api/user:
-#    get:
-#      description: Get user profile
-    put:
-      description: Update user profile
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserUpdateDTO'
-      responses:
-        '200':
-          description: User profile successfully updated
-
-  /api/users:
-    post:
-      description: Register user
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserRegistrationDTO'
-      responses:
-        '200':
-          description: Successfully registered
-
-  /api/users/login:
-    post:
-      description: Login user
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserLoginDTO'
-      responses:
-        '200':
-          description: Successfully logged in
-
-  /api/articles:
-#    get:
-#      description: Get list of articles
-    post:
-      description: Create article
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateArticleRequest'
-      responses:
-        '200':
-          description: Successfully created article
-
-  /api/articles/{slug}:
-#    get:
-#      description: Get an article
-    put:
-      description: Update article
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateArticleRequest'
-      responses:
-        '200':
-          description: Successfully updated article
-#    delete:
-#      description: Delete article
-
-  /api/articles/{slug}/favorite:
-#    post:
-#      description: Make an article favorite
-#    delete:
-#      description: Remove an article from favorites
-
-  /api/articles/{slug}/comments:
-    post:
-      description: Add comment
+  /api/profiles/{username}:
+    get:
+      description: Get a profile of a user
       parameters:
-        - name: slug
+        - name: username
+          in: path
+          description: Username of the profile to get
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Profile has been successfully received
+          $ref: '#/components/schemas/Profile'
+        '404':
+          description: There is no user with this nickname
+
+  /api/profiles/{username}/follow:
+    post:
+      description: Follow the user by username
+      parameters:
+        - name: username
           in: path
           required: true
           schema:
             type: string
       responses:
         '200':
-          description: Comment successfully added
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AddComment'
-#    get:
-#      description: Get comments list
+          description: Successfully subscribed
+          $ref: '#/components/schemas/Profile'
+        '404':
+          description: There is no user with this nickname
+        '400':
+          description: Username is author of the request or already followed
+    delete:
+      summary: Unfollow the user by username
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully unfollowed
+          $ref: '#/components/schemas/Profile'
+        '404':
+          description: There is no user with this nickname
+        '400':
+          description: Username is author of the request or already unfollowed
 
-#  /api/articles/{slug}/comments/{id}:
-#    delete:
-#      description: Delete comment
+
+  /api/user:
+    get:
+      description: Get an user's profile
+      responses:
+        '200':
+          description: Successfully received a profile
+        '404':
+          description: Invalid user_id
+    put:
+      description: Update an user's profile
+      requestBody:
+        $ref: '#/components/schemas/UserUpdateDTO'
+      responses:
+        '200':
+          description: Successfully updated an user's profile
+        '422':
+          description: Invalid input data
+
+  /api/users:
+    post:
+      description: Register a new user
+      requestBody:
+        $ref: '#/components/schemas/UserRegistrationDTO'
+      responses:
+        '200':
+          description: Successfully registered
+        '422':
+          description: Invalid input data
+
+  /api/users/login:
+    post:
+      description: Login user
+      requestBody:
+        $ref: '#/components/schemas/UserLoginDTO'
+      responses:
+        '200':
+          description: Successfully logged in
+        '422':
+          description: Invalid input data
+        '404':
+          description: User has not found
+
+  /api/articles:
+    get:
+      description: Get recent articles globally
+      requestBody:
+        $ref: '#/components/schemas/ArticleFilterDTO'
+      responses:
+        '200':
+          description: Successfully received a list of articles
+        '422':
+          description: Invalid filters entered
+    post:
+      description: Create an article
+      requestBody:
+        $ref: '#/components/schemas/CreateArticleRequest'
+      responses:
+        '200':
+          description: Successfully created an article
+        '422':
+          description: Invalid input data
+
+  /api/articles/{slug}:
+    get:
+      description: Get an article
+      responses:
+        '200':
+          description: Successfully received an article
+        '422':
+          description: Invalid input data
+    put:
+      description: Update an article
+      requestBody:
+        $ref: '#/components/schemas/UpdateArticleRequest'
+      responses:
+        '200':
+          description: Successfully updated an article
+        '422':
+          description: Invalid input data
+        '404':
+          description: Article has not found
+    delete:
+      description: Delete an article
+      responses:
+        '200':
+          description: Successfully deleted an article
+        '403':
+          description: Forbidden to delete an article
+        '404':
+          description: Article has not found
+
+  /api/articles/{slug}/favorite:
+    post:
+      description: Favorite an article
+      responses:
+        '200':
+          description: Successfully favorited an article
+        '404':
+          description: Article has not found
+    delete:
+      description: Remove an article from favorites
+      responses:
+        '200':
+          description: Successfully unfavorited an article
+        '404':
+          description: Article has not found
+
+  /api/articles/feed:
+    get:
+      description: Get recent articles from users you follow
+      requestBody:
+        $ref: '#/components/schemas/FeedArticleFilterDTO'
+      responses:
+        '200':
+          description: Successfully received recent articles
+        '422':
+          description: Invalid input data
+
+  /api/articles/{slug}/comments:
+    post:
+      description: Create a comment for an article
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        $ref: '#/components/schemas/AddComment'
+      responses:
+        '200':
+          description: Comment successfully added
+        '422':
+          description: Invalid input data
+        '404':
+          description: Invalid article_id
+        '501':
+          description: Unknown error. Comment was not added
+    get:
+      description: Get comments for an article
+      responses:
+        '200':
+          description: Successfully received a list of comments
+        '404':
+          description: Invalid slug
+
+  /api/articles/{slug}/comments/{id}:
+    delete:
+      description: Delete a comment for an article
+      '200':
+        description: Successfully deleted a comment
+      '404':
+        description: Invalid comment_id
+      '403':
+        description: This user does not own this comment
+
+  /api/tags:
+    get:
+      description: Get tags
+      '200':
+        description: Successfully received a list of tags
 
 components:
   schemas:
@@ -136,6 +242,10 @@ components:
         email:
           type: string
         password:
+          type: string
+        bio:
+          type: string
+        image:
           type: string
 
     UserUpdateDTO:
@@ -186,40 +296,95 @@ components:
         body:
           type: string
 
-#    Comment:
-
 #    Article:
-
-#    Profile:
-#      type: object
-#      additionalProperties: false
-#      properties:
-#        username:
-#          type: string
-#        bio:
-#        type: string
-#        image:
-#          type: string
-#        following:
-#          type: boolean
 #      required:
-#        - username
-#        - following
+#        - profile
+#        - body
+#        - createdAt
+#        - description
+#        - isFavorited
+#        - favoritesCount
+#        - slug
+#        - title
+#        - updatedAt
+#      type: object
+#      properties:
+#        slug:
+#          type: string
+#        title:
+#          type: string
+#        description:
+#          type: string
+#        body:
+#          type: string
+#        tags:
+#          type: array
+#          items:
+#            type: string
+#        createdAt:
+#          type: string
+#          format: date-time
+#        updatedAt:
+#          type: string
+#          format: date-time
+#        isFavorited:
+#          type: boolean
+#        favoritesCount:
+#          type: integer
+#        profile:
+#          $ref: '#/components/schemas/Profile'
+#      additionalProperties: false
 
-#  securitySchemes:
-#    bearerAuth:
-#      type: http
-#      scheme: bearer
-#      bearerFormat: JWT
+    ArticleFilterDTO:
+      type: object
+      additionalProperties: false
+      properties:
+        tag:
+          type: string
+        author:
+          type: string
+        favorited:
+          type: string
+        limit:
+          type: integer
+          format: int32
+          default: 20
+        offset:
+          type: integer
+          format: int32
+      required:
+        - limit
+        - offset
 
-  responses:
-    UnauthorizedError:
-      description: User is not authorized
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              error:
-                type: string
-                example: "Unauthorized"
+    FeedArticleFilterDTO:
+      type: object
+      additionalProperties: false
+      properties:
+        limit:
+          type: integer
+          format: int32
+          default: 20
+        offset:
+          type: integer
+          format: int32
+      required:
+        - limit
+        - offset
+
+    Profile:
+      type: object
+      additionalProperties: false
+      properties:
+        username:
+          type: string
+        bio:
+          type: string
+        image:
+          type: string
+        following:
+          type: boolean
+      required:
+        - username
+        - following
+        - bio
+        - image

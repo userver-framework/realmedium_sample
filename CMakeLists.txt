@@ -77,8 +77,6 @@ add_library(${PROJECT_NAME}_objs OBJECT
 		src/handlers/auth/auth_bearer.cpp
 		src/dto/article.cpp
 		src/dto/article.hpp
-		src/dto/profile.cpp
-		src/dto/profile.hpp
 		src/dto/comment.hpp
 		src/dto/comment.cpp
 		src/db/sql.hpp

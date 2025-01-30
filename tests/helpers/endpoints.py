@@ -6,7 +6,7 @@ from utils import Routes
 async def register_user(service_client, user):
     return await service_client.post(
         Routes.REGISTRATION,
-        json=model_dump(user, include=RequiredFields.REGISTRATION.value),
+        json=model_dump(user),
     )
 
 

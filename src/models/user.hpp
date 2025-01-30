@@ -16,8 +16,8 @@ struct User final {
   UserId id;
   std::string username;
   std::string email;
-  std::optional<std::string> bio;
-  std::optional<std::string> image;
+  std::string bio;
+  std::string image;
   std::string password_hash;
   std::string salt;
 

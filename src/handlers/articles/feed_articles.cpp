@@ -1,6 +1,7 @@
 #include "feed_articles.hpp"
 #include <sstream>
 #include <userver/formats/serialize/common_containers.hpp>
+#include <docs/api/api.hpp>
 #include "db/sql.hpp"
 #include "dto/article.hpp"
 #include "dto/filter.hpp"
@@ -23,10 +24,10 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     const userver::server::http::HttpRequest& request,
     const userver::formats::json::Value& /*request_json*/,
     userver::server::request::RequestContext& context) const {
-  dto::FeedArticleFilterDTO filter;
+  handlers::FeedArticleFilterDTO filter;
 
   try {
-    filter = dto::Parse<dto::FeedArticleFilterDTO>(request);
+    filter = dto::Parse<handlers::FeedArticleFilterDTO>(request);
   } catch (std::bad_cast& ex) {
     auto& response = request.GetHttpResponse();
     response.SetStatus(userver::server::http::HttpStatus::kUnprocessableEntity);

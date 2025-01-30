@@ -14,7 +14,7 @@ import psycopg2
 COUNT_OF_USERS = 30000
 COUNT_OF_ARTICLES = 30000
 COUNT_OF_COMMENTS = 15000
-MAX_FOLLOWERS = 200  # Максимум Ффоловерок у каждого пользователя
+MAX_FOLLOWERS = 200  # Максимум фоллловеров у каждого пользователя
 MAX_FAVORITES = 200  # Максимум лайков у каждой статьи по отдельности
 NAME_SCHEMA = 'real_medium'
 

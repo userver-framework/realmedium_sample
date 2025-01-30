@@ -40,7 +40,7 @@ json::Value Handler::HandleRequestJsonThrow(const HttpRequest& request,
                                    "There is no user with this nickname.");
   }
 
-  auto profile = res.AsSingleRow<real_medium::models::Profile>(
+  auto profile = res.AsSingleRow<handlers::Profile>(
       userver::storages::postgres::kRowTag);
 
   userver::formats::json::ValueBuilder builder;

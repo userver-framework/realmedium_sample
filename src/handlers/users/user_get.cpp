@@ -1,4 +1,3 @@
-
 #include "user_get.hpp"
 #include "db/sql.hpp"
 #include "models/user.hpp"
@@ -27,7 +26,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   if (result.IsEmpty()) {
     auto& response = request.GetHttpResponse();
     response.SetStatus(userver::server::http::HttpStatus::kNotFound);
-    return utils::error::MakeError("user_id", "Ivanlid user_id. Not found.");
+    return utils::error::MakeError("user_id", "Invalid user_id. Not found.");
   }
 
   auto user = result.AsSingleRow<real_medium::models::User>(

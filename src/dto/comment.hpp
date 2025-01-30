@@ -3,11 +3,11 @@
 #include <string>
 #include <tuple>
 
+#include <docs/api/api.hpp>
 #include <userver/formats/json.hpp>
 #include <userver/formats/parse/common_containers.hpp>
 
 #include "models/comment.hpp"
-#include "profile.hpp"
 
 namespace real_medium::dto {
 
@@ -18,7 +18,7 @@ struct Comment final {
   userver::storages::postgres::TimePointTz createdAt;
   userver::storages::postgres::TimePointTz updatedAt;
   std::string body;
-  dto::Profile author;
+  handlers::Profile author;
 };
 
 userver::formats::json::Value Serialize(

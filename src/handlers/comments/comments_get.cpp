@@ -3,7 +3,6 @@
 #include <userver/formats/serialize/common_containers.hpp>
 #include "db/sql.hpp"
 #include "dto/comment.hpp"
-#include "dto/profile.hpp"
 #include "utils/make_error.hpp"
 
 namespace real_medium::handlers::comments::get {

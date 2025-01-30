@@ -4,9 +4,9 @@
 #include <userver/formats/json/value.hpp>
 #include <userver/formats/parse/common_containers.hpp>
 #include <userver/server/handlers/http_handler_base.hpp>
+#include <docs/api/api.hpp>
 #include <userver/storages/postgres/io/chrono.hpp>
 #include "models/article.hpp"
-#include "profile.hpp"
 
 namespace real_medium::dto {
 struct Article final {
@@ -22,7 +22,7 @@ struct Article final {
   userver::storages::postgres::TimePointTz updatedAt;
   std::int64_t favoritesCount{};
   bool isFavorited{false};
-  dto::Profile profile;
+  handlers::Profile profile;
 };
 
 userver::formats::json::Value Serialize(

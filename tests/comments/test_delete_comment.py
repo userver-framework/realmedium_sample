@@ -15,7 +15,7 @@ from validators import validate_comments
 
 
 async def test_delete_self_comment(service_client):
-    user = User(bio=None, image=None)
+    user = User()
     response = await register_user(service_client, user)
     assert response.status == HTTPStatus.OK
 
@@ -40,12 +40,12 @@ async def test_delete_self_comment(service_client):
 
 
 async def test_delete_not_self_comment(service_client):
-    user = User(bio=None, image=None)
+    user = User()
     response = await register_user(service_client, user)
     assert response.status == HTTPStatus.OK
     user_token = get_user_token(response)
 
-    another_user = User(bio=None, image=None)
+    another_user = User()
     response = await register_user(service_client, another_user)
     assert response.status == HTTPStatus.OK
     another_user_token = get_user_token(response)
@@ -75,7 +75,7 @@ async def test_delete_not_self_comment(service_client):
 
 
 async def test_delete_comment_unknown_article(service_client):
-    user = User(bio=None, image=None)
+    user = User()
     response = await register_user(service_client, user)
     assert response.status == HTTPStatus.OK
 
@@ -95,7 +95,7 @@ async def test_delete_comment_unknown_article(service_client):
 
 
 async def test_delete_unknown_comment(service_client):
-    user = User(bio=None, image=None)
+    user = User()
     response = await register_user(service_client, user)
     assert response.status == HTTPStatus.OK
 
@@ -110,7 +110,7 @@ async def test_delete_unknown_comment(service_client):
 
 
 async def test_delete_comment_unauthorized(service_client):
-    user = User(bio=None, image=None)
+    user = User()
     response = await register_user(service_client, user)
     assert response.status == HTTPStatus.OK
 

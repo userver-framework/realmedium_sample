@@ -12,7 +12,7 @@ from validators import validate_article
 
 
 async def test_favourite_article_unauthorized(service_client):
-    user = User(bio=None, image=None)
+    user = User()
     response = await register_user(service_client, user)
     assert response.status == HTTPStatus.OK
 
@@ -27,7 +27,7 @@ async def test_favourite_article_unauthorized(service_client):
 
 
 async def test_favourite_unknown_article(service_client):
-    user = User(bio=None, image=None)
+    user = User()
     response = await register_user(service_client, user)
     assert response.status == HTTPStatus.OK
 
@@ -40,7 +40,7 @@ async def test_favourite_unknown_article(service_client):
 
 
 async def test_favourite_article(service_client):
-    user = User(bio=None, image=None)
+    user = User()
     response = await register_user(service_client, user)
     assert response.status == HTTPStatus.OK
 
@@ -50,7 +50,7 @@ async def test_favourite_article(service_client):
     response = await create_article(service_client, article, user_token)
     assert response.status == HTTPStatus.OK
 
-    another_user = User(bio=None, image=None)
+    another_user = User()
     response = await register_user(service_client, another_user)
     assert response.status == HTTPStatus.OK
 
@@ -81,7 +81,7 @@ async def test_favourite_article(service_client):
 
 async def test_self_favorite_article(service_client):
 
-    user = User(bio=None, image=None)
+    user = User()
     response = await register_user(service_client, user)
     assert response.status == HTTPStatus.OK
 
@@ -108,7 +108,7 @@ async def test_self_favorite_article(service_client):
 
 
 async def test_multiple_favorite_article(service_client):
-    user = User(bio=None, image=None)
+    user = User()
     response = await register_user(service_client, user)
     assert response.status == HTTPStatus.OK
 
@@ -121,7 +121,7 @@ async def test_multiple_favorite_article(service_client):
 
     tokens = []
     for _ in range(3):
-        user = User(bio=None, image=None)
+        user = User()
         response = await register_user(service_client, user)
         assert response.status == HTTPStatus.OK
         tokens.append(get_user_token(response))

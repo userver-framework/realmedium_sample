@@ -11,7 +11,7 @@ from validators import validate_article
 
 
 async def test_get_article(service_client):
-    user = User(bio=None, image=None)
+    user = User()
 
     response = await register_user(service_client, user)
     assert response.status == HTTPStatus.OK
@@ -29,7 +29,7 @@ async def test_get_article(service_client):
 
 
 async def test_get_unknown_article(service_client):
-    user = User(bio=None, image=None)
+    user = User()
 
     response = await register_user(service_client, user)
     assert response.status == HTTPStatus.OK
@@ -43,7 +43,7 @@ async def test_get_unknown_article(service_client):
 
 
 async def test_get_article_unauthorized(service_client):
-    user = User(bio=None, image=None)
+    user = User()
 
     response = await register_user(service_client, user)
     assert response.status == HTTPStatus.OK

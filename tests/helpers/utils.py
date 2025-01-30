@@ -49,3 +49,7 @@ def get_user_token(response):
 
 def generate_title():
     return ' '.join(fake.words(nb=5))
+
+def generate_words():
+    words = [word for word in fake.words(nb=10) if len(word) > 2]
+    return words

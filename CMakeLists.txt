@@ -121,7 +121,6 @@ userver_target_generate_chaotic(${PROJECT_NAME}-chgen
     ARGS
         -n "/components/schemas/([^/]*)/=real_medium::handlers::{0}"
         -f "(.*)={0}"
-        --clang-format=
         --generate-serializers
     OUTPUT_DIR
         ${CMAKE_CURRENT_BINARY_DIR}/src

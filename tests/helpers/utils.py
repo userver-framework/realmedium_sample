@@ -54,4 +54,3 @@ def generate_title():
 def generate_words():
     words = [word for word in fake.words(nb=10) if len(word) > 2]
     return words
-

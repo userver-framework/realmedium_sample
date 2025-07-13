@@ -38,8 +38,7 @@
 using namespace real_medium::handlers;
 
 int main(int argc, char* argv[]) {
-  userver::server::handlers::auth::RegisterAuthCheckerFactory(
-      "bearer", std::make_unique<real_medium::auth::CheckerFactory>());
+  userver::server::handlers::auth::RegisterAuthCheckerFactory<real_medium::auth::CheckerFactory>();
 
   auto component_list =
       userver::components::MinimalServerComponentList()

@@ -1,6 +1,8 @@
-name: CI
+name: urealmedium CI
 
 'on':
+    schedule:
+      - cron: '30 5 * * 1'  # Every Monday at 5:30
     pull_request:
     push:
         branches:
@@ -50,7 +52,6 @@ jobs:
             run: |
                 sudo apt purge libpq5 libpq-dev postgresql-*
                 sudo apt install -y postgresql-14 postgresql-client-14 postgresql-server-dev-14
-
 
           - name: Setup ccache
             run: |

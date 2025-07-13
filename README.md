@@ -1,9 +1,15 @@
 # RealMedium
 
-## THIS SAMPLE IS NOT READY! COME BACK LATER
-
 This is project created in summer school Yandex.
 This codebase was created to demonstrate a fully fledged backend application built with **[userver framework](https://userver.tech/)**
+
+### Prerequisites
+
+[Install the userver](https://userver.tech/de/dab/md_en_2userver_2build_2build.html#ways_to_get_userver) into the system
+or
+* check it out `git clone --depth 1 https://github.com/userver-framework/userver.git /path/to/userver`
+* install all of its dependencies
+* `ln -s /path/to/userver /path/to/realmedioum_sample/third_party/userver`
 
 ### Docker-compose
 ```
@@ -13,16 +19,20 @@ git submodule update --init
 # Run service
 make docker-start-service-release
 ```
+
 ### Local
 ```
 make service-start-release
 ```
+
 ## Tests
 Run unit and functional tests in docker or local.
+
 ### Docker-compose
 ```
 make docker-test-release
 ```
+
 ### Local
 ```
 make test-release

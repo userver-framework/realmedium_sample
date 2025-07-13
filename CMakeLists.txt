@@ -118,10 +118,8 @@ target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::core userver::postgre
 
 file(GLOB_RECURSE SCHEMAS ${CMAKE_CURRENT_SOURCE_DIR}/docs/*.yaml)
 userver_target_generate_chaotic(${PROJECT_NAME}-chgen
-    ARGS
-        -n "/components/schemas/([^/]*)/=real_medium::handlers::{0}"
-        -f "(.*)={0}"
-        --generate-serializers
+    LAYOUT "/components/schemas/([^/]*)/=real_medium::handlers::{0}"
+    GENERATE_SERIALIZERS
     OUTPUT_DIR
         ${CMAKE_CURRENT_BINARY_DIR}/src
     SCHEMAS

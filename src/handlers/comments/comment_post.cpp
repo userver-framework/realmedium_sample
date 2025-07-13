@@ -1,9 +1,9 @@
 #include <docs/api/api.hpp>
 
+#include <dto/comment.hpp>
 #include "comment_post.hpp"
 #include "db/sql.hpp"
 #include "models/comment.hpp"
-#include <dto/comment.hpp>
 
 #include "utils/errors.hpp"
 #include "utils/make_error.hpp"

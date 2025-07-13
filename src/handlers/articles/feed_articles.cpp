@@ -1,7 +1,7 @@
 #include "feed_articles.hpp"
+#include <docs/api/api.hpp>
 #include <sstream>
 #include <userver/formats/serialize/common_containers.hpp>
-#include <docs/api/api.hpp>
 #include "db/sql.hpp"
 #include "dto/article.hpp"
 #include "dto/filter.hpp"

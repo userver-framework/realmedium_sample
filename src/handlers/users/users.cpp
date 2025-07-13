@@ -2,8 +2,8 @@
 
 #include "users.hpp"
 
-#include <userver/crypto/hash.hpp>
 #include <docs/api/api.hpp>
+#include <userver/crypto/hash.hpp>
 
 #include "db/sql.hpp"
 #include "models/user.hpp"
@@ -26,7 +26,7 @@ RegisterUser::RegisterUser(
 userver::formats::json::Value RegisterUser::HandleRequestJsonThrow(
     const userver::server::http::HttpRequest& request,
     const userver::formats::json::Value& request_json,
-    userver::server::request::RequestContext& context) const {
+    userver::server::request::RequestContext&) const {
   handlers::UserRegistrationDTO user_register =
       request_json["user"].As<handlers::UserRegistrationDTO>();
   ;
@@ -47,8 +47,7 @@ userver::formats::json::Value RegisterUser::HandleRequestJsonThrow(
     auto query_result = pg_cluster_->Execute(
         userver::storages::postgres::ClusterHostType::kMaster,
         sql::kInsertUser.data(), user_register.username, user_register.email,
-        user_register.bio, user_register.image,
-        hash_password, salt);
+        user_register.bio, user_register.image, hash_password, salt);
     result_user = query_result.AsSingleRow<models::User>(
         userver::storages::postgres::kRowTag);
   } catch (const userver::storages::postgres::UniqueViolation& ex) {

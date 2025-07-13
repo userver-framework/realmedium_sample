@@ -1,5 +1,6 @@
 #include "users_login.hpp"
 
+#include <docs/api/api.hpp>
 #include <userver/components/component_config.hpp>
 #include <userver/components/component_context.hpp>
 #include <userver/crypto/hash.hpp>
@@ -7,7 +8,6 @@
 #include <userver/server/http/http_status.hpp>
 #include <userver/storages/postgres/cluster.hpp>
 #include <userver/storages/postgres/component.hpp>
-#include <docs/api/api.hpp>
 
 #include "db/sql.hpp"
 #include "models/user.hpp"
@@ -47,15 +47,14 @@ class LoginUser final : public userver::server::handlers::HttpHandlerJsonBase {
 
     auto salt = pg_cluster_->Execute(
         userver::storages::postgres::ClusterHostType::kMaster,
-        sql::kGetSaltByEmail.data(),
-        user_login.email);
+        sql::kGetSaltByEmail.data(), user_login.email);
     if (salt.IsEmpty()) {
       auto& response = request.GetHttpResponse();
       response.SetStatus(userver::server::http::HttpStatus::kNotFound);
       return {};
     }
-    auto password_hash =
-        userver::crypto::hash::Sha256(user_login.password.value() + salt.AsSingleRow<std::string>());
+    auto password_hash = userver::crypto::hash::Sha256(
+        user_login.password.value() + salt.AsSingleRow<std::string>());
 
     auto userResult = pg_cluster_->Execute(
         userver::storages::postgres::ClusterHostType::kMaster,

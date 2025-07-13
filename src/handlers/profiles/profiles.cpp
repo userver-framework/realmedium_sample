@@ -1,6 +1,6 @@
 #include "profiles.hpp"
-#include <string>
 #include <docs/api/api.hpp>
+#include <string>
 #include "db/sql.hpp"
 #include "models/profile.hpp"
 #include "utils/make_error.hpp"
@@ -40,8 +40,8 @@ json::Value Handler::HandleRequestJsonThrow(const HttpRequest& request,
                                    "There is no user with this nickname.");
   }
 
-  auto profile = res.AsSingleRow<handlers::Profile>(
-      userver::storages::postgres::kRowTag);
+  auto profile =
+      res.AsSingleRow<handlers::Profile>(userver::storages::postgres::kRowTag);
 
   userver::formats::json::ValueBuilder builder;
   builder["profile"] = profile;

@@ -35,7 +35,7 @@ async def test_feed_articles(service_client):
         response = await create_article(service_client, article, user_token)
         assert response.status == HTTPStatus.OK
 
-    await service_client.invalidate_caches()
+    await service_client.update_server_state()
     response = await feed_articles(service_client, another_user_token, 2, 0)
     assert response.status == HTTPStatus.OK
     assert validate_articles(ArticleList(0), response)
@@ -47,7 +47,7 @@ async def test_feed_articles(service_client):
     feed_articles_result = ArticleList(
         init_articles=article_lst.articles[:-3:-1],
     )
-    await service_client.invalidate_caches()
+    await service_client.update_server_state()
     response = await feed_articles(service_client, another_user_token, 2, 0)
     assert response.status == HTTPStatus.OK
     assert validate_articles(feed_articles_result, response)

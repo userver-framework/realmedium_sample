@@ -42,7 +42,7 @@ async def test_get_comments_authorized(service_client):
         )
         assert response.status == HTTPStatus.OK
 
-    await service_client.invalidate_caches()
+    await service_client.update_server_state()
     response = await get_comments(service_client, article, user_token)
     assert response.status == HTTPStatus.OK
     assert validate_comments(commentList, response)
@@ -74,7 +74,7 @@ async def test_get_comments_unknown_article(service_client):
         assert response.status == HTTPStatus.OK
 
     article.slug = 'some_slug'
-    await service_client.invalidate_caches()
+    await service_client.update_server_state()
     response = await get_comments(service_client, article, user_token)
     assert response.status == HTTPStatus.NOT_FOUND
 
@@ -105,7 +105,7 @@ async def test_get_comments_unauthorized(service_client):
         )
         assert response.status == HTTPStatus.OK
 
-    await service_client.invalidate_caches()
+    await service_client.update_server_state()
     response = await get_comments(service_client, article, None)
     assert response.status == HTTPStatus.OK
     assert validate_comments(commentList, response)

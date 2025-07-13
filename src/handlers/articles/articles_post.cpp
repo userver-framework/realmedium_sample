@@ -1,6 +1,6 @@
 #include "articles_post.hpp"
-#include <userver/logging/log.hpp>
 #include <docs/api/api.hpp>
+#include <userver/logging/log.hpp>
 
 #include "../../db/sql.hpp"
 #include "../../models/article.hpp"
@@ -22,7 +22,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     const userver::formats::json::Value& request_json,
     userver::server::request::RequestContext& context) const {
   handlers::CreateArticleRequest createArticleRequest =
-          request_json["article"].As<handlers::CreateArticleRequest>();
+      request_json["article"].As<handlers::CreateArticleRequest>();
   try {
     validator::validate(createArticleRequest);
   } catch (const real_medium::utils::error::ValidationException& ex) {

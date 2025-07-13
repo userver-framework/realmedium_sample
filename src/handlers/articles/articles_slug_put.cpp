@@ -22,9 +22,9 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     userver::server::request::RequestContext& context) const {
   auto slug = request.GetPathArg("slug");
   handlers::UpdateArticleRequest updateRequest =
-          request_json["article"].As<handlers::UpdateArticleRequest>();
+      request_json["article"].As<handlers::UpdateArticleRequest>();
   try {
-      validator::validate(updateRequest);
+    validator::validate(updateRequest);
   } catch (const real_medium::utils::error::ValidationException& ex) {
     request.SetResponseStatus(
         userver::server::http::HttpStatus::kUnprocessableEntity);

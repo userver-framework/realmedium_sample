@@ -10,13 +10,14 @@
 
 namespace real_medium::auth {
 
-class AuthCheckerBearer final : public userver::server::handlers::auth::AuthCheckerBase {
+class AuthCheckerBearer final
+    : public userver::server::handlers::auth::AuthCheckerBase {
  public:
   using AuthCheckResult = userver::server::handlers::auth::AuthCheckResult;
 
-  AuthCheckerBearer(userver::storages::postgres::ClusterPtr pg_cluster, bool is_required)
-      : pg_cluster_(std::move(pg_cluster)),
-        is_required_(is_required) {}
+  AuthCheckerBearer(userver::storages::postgres::ClusterPtr pg_cluster,
+                    bool is_required)
+      : pg_cluster_(std::move(pg_cluster)), is_required_(is_required) {}
 
   [[nodiscard]] AuthCheckResult CheckAuth(
       const userver::server::http::HttpRequest& request,
@@ -83,14 +84,17 @@ AuthCheckerBearer::AuthCheckResult AuthCheckerBearer::CheckAuth(
   return {};
 }
 
-CheckerFactory::CheckerFactory(const userver::components::ComponentContext& context):
-    pg_cluster_(context
-                        .FindComponent<userver::components::Postgres>(
-                            "realmedium-database")
-                        .GetCluster())
-{}
+CheckerFactory::CheckerFactory(
+    const userver::components::ComponentContext& context)
+    : pg_cluster_(context
+                      .FindComponent<userver::components::Postgres>(
+                          "realmedium-database")
+                      .GetCluster()) {}
 
-userver::server::handlers::auth::AuthCheckerBasePtr CheckerFactory::MakeAuthChecker(const userver::server::handlers::auth::HandlerAuthConfig& auth_config) const {
+userver::server::handlers::auth::AuthCheckerBasePtr
+CheckerFactory::MakeAuthChecker(
+    const userver::server::handlers::auth::HandlerAuthConfig& auth_config)
+    const {
   auto is_required = auth_config["required"].As<bool>(false);
   return std::make_shared<AuthCheckerBearer>(pg_cluster_, is_required);
 }

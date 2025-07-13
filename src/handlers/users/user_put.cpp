@@ -1,6 +1,6 @@
 #include "user_put.hpp"
-#include <userver/crypto/hash.hpp>
 #include <docs/api/api.hpp>
+#include <userver/crypto/hash.hpp>
 #include "db/sql.hpp"
 #include "models/user.hpp"
 #include "utils/errors.hpp"
@@ -37,8 +37,8 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   std::optional<std::string> salt = std::nullopt;
   if (user_change_data.password) {
     salt = utils::random::GenerateSalt();
-    password_hash =
-        userver::crypto::hash::Sha256(user_change_data.password.value() + salt.value());
+    password_hash = userver::crypto::hash::Sha256(
+        user_change_data.password.value() + salt.value());
   }
 
   const auto result = pg_cluster_->Execute(

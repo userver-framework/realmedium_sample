@@ -1,8 +1,8 @@
 #include <docs/api/api.hpp>
 
-#include "profiles_follow_delete.hpp"
 #include "db/sql.hpp"
 #include "models/profile.hpp"
+#include "profiles_follow_delete.hpp"
 #include "userver/formats/yaml/value_builder.hpp"
 #include "userver/server/handlers/http_handler_base.hpp"
 #include "userver/storages/postgres/cluster.hpp"
@@ -58,9 +58,8 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
       pg_cluster_->Execute(userver::storages::postgres::ClusterHostType::kSlave,
                            sql::KUnFollowingUser.data(), username_id, user_id);
 
-  const auto profile =
-      res_unfollowing.AsSingleRow<handlers::Profile>(
-          userver::storages::postgres::kRowTag);
+  const auto profile = res_unfollowing.AsSingleRow<handlers::Profile>(
+      userver::storages::postgres::kRowTag);
 
   if (profile.following) {
     auto& response = request.GetHttpResponse();

@@ -52,7 +52,7 @@ async def test_list_articles_unauthorized(service_client):
         article.favoritesCount = 1
         assert response.status == HTTPStatus.OK
 
-    await service_client.invalidate_caches()
+    await service_client.update_server_state()
     response = await list_articles(
         service_client,
         None,
@@ -109,7 +109,7 @@ async def test_list_articles(service_client):
     assert response.status == HTTPStatus.OK
     author_profile.following = True
 
-    await service_client.invalidate_caches()
+    await service_client.update_server_state()
     response = await list_articles(
         service_client,
         user_token,

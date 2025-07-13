@@ -1,6 +1,6 @@
 #include "articles_get.hpp"
-#include <userver/formats/serialize/common_containers.hpp>
 #include <docs/api/api.hpp>
+#include <userver/formats/serialize/common_containers.hpp>
 #include "db/sql.hpp"
 #include "dto/article.hpp"
 #include "dto/filter.hpp"

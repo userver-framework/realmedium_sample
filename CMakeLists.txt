@@ -151,7 +151,9 @@ target_link_libraries(${PROJECT_NAME}_unittest PRIVATE ${PROJECT_NAME}_objs user
 add_google_tests(${PROJECT_NAME}_unittest)
 
 # Functional Tests
-add_subdirectory(tests)
+userver_testsuite_add_simple(
+  REQUIREMENTS ${CMAKE_CURRENT_SOURCE_DIR}/tests/requirements.txt
+)
 
 # Install
 include(GNUInstallDirs)

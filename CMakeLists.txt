@@ -80,7 +80,6 @@ add_library(${PROJECT_NAME}_objs OBJECT
 		src/dto/comment.hpp
 		src/dto/comment.cpp
 		src/db/sql.hpp
-		src/db/types.hpp
 		src/models/user.hpp
 		src/models/user.cpp
 		src/models/comment.hpp
@@ -88,7 +87,6 @@ add_library(${PROJECT_NAME}_objs OBJECT
 		src/models/article.hpp
 		src/models/article.cpp
 		src/models/profile.hpp
-		src/models/profile.cpp
 		src/validators/user_validators.hpp
 		src/validators/user_validators.cpp
 		src/validators/length_validator.hpp

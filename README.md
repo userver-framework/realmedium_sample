@@ -1,5 +1,8 @@
 # RealMedium
 
+[![urealmedium CI](https://github.com/userver-framework/realmedium_sample/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/userver-framework/realmedium_sample/actions/workflows/ci.yml)
+[![urealmedium Docker build](https://github.com/userver-framework/realmedium_sample/actions/workflows/docker.yaml/badge.svg?branch=develop)](https://github.com/userver-framework/realmedium_sample/actions/workflows/docker.yaml)
+
 This is project created in summer school Yandex.
 This codebase was created to demonstrate a fully fledged backend application built with **[userver framework](https://userver.tech/)**
 

@@ -1,5 +1,4 @@
 import os
-import pathlib
 import sys
 
 import pytest
@@ -10,20 +9,6 @@ sys.path.append(os.path.join(os.path.dirname(__file__), 'helpers'))
 
 
 pytest_plugins = ['pytest_userver.plugins.postgresql']
-
-
-@pytest.fixture(scope='session')
-def service_source_dir():
-    """Path to root directory service."""
-    return pathlib.Path(__file__).parent.parent
-
-
-@pytest.fixture(scope='session')
-def initial_data_path(service_source_dir):
-    """Path for find files with data"""
-    return [
-        service_source_dir / 'postgresql/data',
-    ]
 
 
 @pytest.fixture(scope='session')

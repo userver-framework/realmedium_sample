@@ -17,7 +17,7 @@ async def test_unfollow_user_unauthorized(service_client):
 
 
 async def test_unfollow_unknown_user(service_client):
-    user = User(bio=None, image=None)
+    user = User()
     response = await register_user(service_client, user)
     assert response.status == HTTPStatus.OK
 
@@ -29,14 +29,14 @@ async def test_unfollow_unknown_user(service_client):
 
 
 async def test_unfollow_user(service_client):
-    user = User(bio=None, image=None)
+    user = User()
 
     response = await register_user(service_client, user)
     assert response.status == HTTPStatus.OK
 
     user_token = get_user_token(response)
 
-    followed_user = User(bio=None, image=None)
+    followed_user = User()
     response = await register_user(service_client, followed_user)
     assert response.status == HTTPStatus.OK
 

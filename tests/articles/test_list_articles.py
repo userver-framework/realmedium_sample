@@ -19,7 +19,7 @@ async def test_list_articles_unauthorized(service_client):
     assert response.status == HTTPStatus.OK
     assert validate_articles(ArticleList(0), response)
 
-    author = User(bio=None, image=None)
+    author = User()
     response = await register_user(service_client, author)
     assert response.status == HTTPStatus.OK
 
@@ -39,7 +39,7 @@ async def test_list_articles_unauthorized(service_client):
         init_articles=article_lst.articles[:-3:-1],
     )
 
-    another_user = User(bio=None, image=None)
+    another_user = User()
     response = await register_user(service_client, another_user)
     assert response.status == HTTPStatus.OK
 
@@ -67,7 +67,7 @@ async def test_list_articles_unauthorized(service_client):
 
 
 async def test_list_articles(service_client):
-    user = User(bio=None, image=None)
+    user = User()
     response = await register_user(service_client, user)
     assert response.status == HTTPStatus.OK
 
@@ -79,7 +79,7 @@ async def test_list_articles(service_client):
     assert response.status == HTTPStatus.OK
     assert validate_articles(ArticleList(0), response)
 
-    author = User(bio=None, image=None)
+    author = User()
     response = await register_user(service_client, author)
     assert response.status == HTTPStatus.OK
 

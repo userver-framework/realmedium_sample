@@ -61,7 +61,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
         userver::server::http::HttpStatus::kNotImplemented);  // 501, мб надо
                                                               // заменить
     return utils::error::MakeError(
-        "none", "Unknow error. The comment was not added to the database.");
+        "none", "Unknown error. The comment was not added to the database.");
   }
 
   auto comment_res_data =

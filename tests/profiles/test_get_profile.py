@@ -9,7 +9,7 @@ from validators import validate_profile
 
 
 async def test_get_profile_auth(service_client):
-    user = User(bio=None, image=None)
+    user = User()
 
     response = await register_user(service_client, user)
     assert response.status == HTTPStatus.OK
@@ -24,7 +24,7 @@ async def test_get_profile_auth(service_client):
 
 
 async def test_get_profile_unauthorized(service_client):
-    user = User(bio=None, image=None)
+    user = User()
 
     response = await register_user(service_client, user)
     assert response.status == HTTPStatus.OK

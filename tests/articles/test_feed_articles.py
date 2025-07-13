@@ -17,13 +17,13 @@ async def test_feed_articles_unauthorized(service_client):
 
 
 async def test_feed_articles(service_client):
-    user = User(bio=None, image=None)
+    user = User()
     response = await register_user(service_client, user)
     assert response.status == HTTPStatus.OK
 
     user_token = get_user_token(response)
 
-    another_user = User(bio=None, image=None)
+    another_user = User()
     response = await register_user(service_client, another_user)
     assert response.status == HTTPStatus.OK
 

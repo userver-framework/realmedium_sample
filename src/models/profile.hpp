@@ -12,8 +12,8 @@ namespace real_medium::models {
 
 struct Profile final {
   std::string username;
-  std::optional<std::string> bio;
-  std::optional<std::string> image;
+  std::string bio;
+  std::string image;
   bool following{false};
   auto Introspect() { return std::tie(username, bio, image, following); }
 };

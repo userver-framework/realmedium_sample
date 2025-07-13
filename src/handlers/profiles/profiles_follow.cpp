@@ -1,6 +1,7 @@
+#include <docs/api/api.hpp>
+
 #include "profiles_follow.hpp"
 #include "db/sql.hpp"
-#include "dto/profile.hpp"
 #include "models/profile.hpp"
 #include "utils/make_error.hpp"
 
@@ -59,7 +60,7 @@ namespace real_medium::handlers::profiles::post {
                 pg_cluster_->Execute(userver::storages::postgres::ClusterHostType::kSlave,
                                      sql::KFollowingUser.data(), username_id, user_id);
 
-        const auto profile = res_following.AsSingleRow<real_medium::models::Profile>(
+        const auto profile = res_following.AsSingleRow<handlers::Profile>(
                 userver::storages::postgres::kRowTag);
 
         if (!profile.following) {

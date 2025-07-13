@@ -12,7 +12,7 @@ from validators import validate_comment
 
 
 async def test_add_self_comment(service_client):
-    user = User(bio=None, image=None)
+    user = User()
     response = await register_user(service_client, user)
     assert response.status == HTTPStatus.OK
 
@@ -29,12 +29,12 @@ async def test_add_self_comment(service_client):
 
 
 async def test_add_not_self_comment(service_client):
-    user = User(bio=None, image=None)
+    user = User()
     response = await register_user(service_client, user)
     assert response.status == HTTPStatus.OK
     user_token = get_user_token(response)
 
-    another_user = User(bio=None, image=None)
+    another_user = User()
     response = await register_user(service_client, another_user)
     assert response.status == HTTPStatus.OK
     another_user_token = get_user_token(response)
@@ -53,7 +53,7 @@ async def test_add_not_self_comment(service_client):
 
 
 async def test_add_comment_unknown_article(service_client):
-    user = User(bio=None, image=None)
+    user = User()
     response = await register_user(service_client, user)
     assert response.status == HTTPStatus.OK
 
@@ -66,7 +66,7 @@ async def test_add_comment_unknown_article(service_client):
 
 
 async def test_add_comment_unauthorized(service_client):
-    user = User(bio=None, image=None)
+    user = User()
     response = await register_user(service_client, user)
     assert response.status == HTTPStatus.OK
 

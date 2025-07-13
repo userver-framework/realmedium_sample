@@ -66,6 +66,7 @@ Anna Volkova <anna.mikhaylova09@yandex.ru>
 Nikita Semenov <nikitasemenov0388@gmail.com>  
 Vadim Romanyuk <vadprof10@gmail.com>  
 artemiev.kk <artemiev.kk@infotek.ru>  
+Elizaveta Rudneva <el1zarudneva@yandex.ru>
 
 
 **Maintainer:**  

@@ -17,7 +17,7 @@ async def test_create_article_unauthorized(service_client):
 
 
 async def test_create_article(service_client):
-    user = User(bio=None, image=None)
+    user = User()
     response = await register_user(service_client, user)
     assert response.status == HTTPStatus.OK
 

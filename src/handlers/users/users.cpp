@@ -47,6 +47,7 @@ userver::formats::json::Value RegisterUser::HandleRequestJsonThrow(
     auto query_result = pg_cluster_->Execute(
         userver::storages::postgres::ClusterHostType::kMaster,
         sql::kInsertUser.data(), user_register.username, user_register.email,
+        user_register.bio, user_register.image,
         hash_password, salt);
     result_user = query_result.AsSingleRow<models::User>(
         userver::storages::postgres::kRowTag);

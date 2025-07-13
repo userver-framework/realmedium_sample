@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <userver/cache/base_postgres_cache.hpp>
 #include <userver/storages/postgres/io/chrono.hpp>
+#include <docs/api/api.hpp>
 #include "../db/sql.hpp"
 #include "../dto/filter.hpp"
 #include "../models/article.hpp"
@@ -23,9 +24,9 @@ class ArticlesCacheContainer {
 
   ArticlePtr findArticleBySlug(const Slug& slug) const;
   std::vector<ArticlePtr> getRecent(
-      real_medium::dto::ArticleFilterDTO& filter_) const;
+      real_medium::handlers::ArticleFilterDTO& filter_) const;
   std::vector<ArticlePtr> getFeed(
-      real_medium::dto::FeedArticleFilterDTO& filter_, UserId authId_) const;
+      real_medium::handlers::FeedArticleFilterDTO& filter_, UserId authId_) const;
 
  private:
   struct TimepointedArticle {

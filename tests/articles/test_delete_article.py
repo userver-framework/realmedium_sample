@@ -18,7 +18,7 @@ from validators import validate_comments
 
 
 async def test_delete_article_unauthorized(service_client):
-    user = User(bio=None, image=None)
+    user = User()
     response = await register_user(service_client, user)
     assert response.status == HTTPStatus.OK
 
@@ -33,7 +33,7 @@ async def test_delete_article_unauthorized(service_client):
 
 
 async def test_delete_unknown_article(service_client):
-    user = User(bio=None, image=None)
+    user = User()
     response = await register_user(service_client, user)
     assert response.status == HTTPStatus.OK
 
@@ -45,7 +45,7 @@ async def test_delete_unknown_article(service_client):
 
 
 async def test_delete_article(service_client):
-    user = User(bio=None, image=None)
+    user = User()
     response = await register_user(service_client, user)
     assert response.status == HTTPStatus.OK
 
@@ -84,7 +84,7 @@ async def test_delete_article(service_client):
 
 
 async def test_invalid_access_delete_article(service_client):
-    user = User(bio=None, image=None)
+    user = User()
     response = await register_user(service_client, user)
     assert response.status == HTTPStatus.OK
 
@@ -94,7 +94,7 @@ async def test_invalid_access_delete_article(service_client):
     )
     assert response.status == HTTPStatus.OK
 
-    another_user = User(bio=None, image=None)
+    another_user = User()
     response = await register_user(service_client, another_user)
     assert response.status == HTTPStatus.OK
 

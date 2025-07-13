@@ -1,11 +1,12 @@
 #include "filter.hpp"
+#include <docs/api/api.hpp>
 #include "boost/lexical_cast.hpp"
 
 namespace real_medium::dto {
 
 template <>
-FeedArticleFilterDTO Parse(const userver::server::http::HttpRequest& request) {
-  FeedArticleFilterDTO filter;
+handlers::FeedArticleFilterDTO Parse(const userver::server::http::HttpRequest& request) {
+  handlers::FeedArticleFilterDTO filter;
   if (request.HasArg("limit")) {
     filter.limit = boost::lexical_cast<std::int32_t>(request.GetArg("limit"));
     filter.limit = std::max(0, filter.limit);
@@ -18,8 +19,8 @@ FeedArticleFilterDTO Parse(const userver::server::http::HttpRequest& request) {
 }
 
 template <>
-ArticleFilterDTO Parse(const userver::server::http::HttpRequest& request) {
-  ArticleFilterDTO filter;
+handlers::ArticleFilterDTO Parse(const userver::server::http::HttpRequest& request) {
+  handlers::ArticleFilterDTO filter;
   if (request.HasArg("tag")) {
     filter.tag = request.GetArg("tag");
   }

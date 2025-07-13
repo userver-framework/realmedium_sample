@@ -11,7 +11,7 @@ from validators import validate_tags
 
 
 async def test_get_tags(service_client):
-    user = User(bio=None, image=None)
+    user = User()
 
     response = await register_user(service_client, user)
     assert response.status == HTTPStatus.OK
@@ -23,7 +23,6 @@ async def test_get_tags(service_client):
     for article in articleList.articles:
         response = await create_article(service_client, article, user_token)
         assert response.status == HTTPStatus.OK
-        print(article.tags)
         tags |= set(article.tags)
 
     response = await get_tags(service_client)

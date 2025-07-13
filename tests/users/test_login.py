@@ -7,7 +7,7 @@ from validators import validate_user
 
 
 async def test_login(service_client):
-    user = User(bio=None, image=None)
+    user = User()
     response = await register_user(service_client, user)
     assert response.status == HTTPStatus.OK
 
@@ -17,6 +17,6 @@ async def test_login(service_client):
 
 
 async def test_login_unknown(service_client):
-    user = User(bio=None, image=None)
+    user = User()
     response = await login_user(service_client, user)
     assert response.status == HTTPStatus.NOT_FOUND

@@ -1,6 +1,7 @@
+#include <docs/api/api.hpp>
+
 #include "profiles_follow_delete.hpp"
 #include "db/sql.hpp"
-#include "dto/profile.hpp"
 #include "models/profile.hpp"
 #include "userver/formats/yaml/value_builder.hpp"
 #include "userver/server/handlers/http_handler_base.hpp"
@@ -58,7 +59,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
                            sql::KUnFollowingUser.data(), username_id, user_id);
 
   const auto profile =
-      res_unfollowing.AsSingleRow<real_medium::models::Profile>(
+      res_unfollowing.AsSingleRow<handlers::Profile>(
           userver::storages::postgres::kRowTag);
 
   if (profile.following) {

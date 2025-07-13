@@ -77,8 +77,6 @@ add_library(${PROJECT_NAME}_objs OBJECT
 		src/handlers/auth/auth_bearer.cpp
 		src/dto/article.cpp
 		src/dto/article.hpp
-		src/dto/profile.cpp
-		src/dto/profile.hpp
 		src/dto/comment.hpp
 		src/dto/comment.cpp
 		src/db/sql.hpp
@@ -123,7 +121,6 @@ userver_target_generate_chaotic(${PROJECT_NAME}-chgen
     ARGS
         -n "/components/schemas/([^/]*)/=real_medium::handlers::{0}"
         -f "(.*)={0}"
-        --clang-format=
         --generate-serializers
     OUTPUT_DIR
         ${CMAKE_CURRENT_BINARY_DIR}/src

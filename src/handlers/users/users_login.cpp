@@ -1,14 +1,12 @@
 #include "users_login.hpp"
 
 #include <docs/api/api.hpp>
-#include <userver/components/component_config.hpp>
-#include <userver/components/component_context.hpp>
 #include <userver/crypto/hash.hpp>
-#include <userver/server/handlers/http_handler_json_base.hpp>
 #include <userver/server/http/http_status.hpp>
 #include <userver/storages/postgres/cluster.hpp>
 #include <userver/storages/postgres/component.hpp>
 
+#include "handlers/common.hpp"
 #include "db/sql.hpp"
 #include "models/user.hpp"
 #include "utils/errors.hpp"
@@ -18,17 +16,11 @@ namespace real_medium::handlers::users_login::post {
 
 namespace {
 
-class LoginUser final : public userver::server::handlers::HttpHandlerJsonBase {
+class LoginUser final : public Common {
  public:
   static constexpr std::string_view kName = "handler-login-user";
 
-  LoginUser(const userver::components::ComponentConfig& config,
-            const userver::components::ComponentContext& component_context)
-      : HttpHandlerJsonBase(config, component_context),
-        pg_cluster_(component_context
-                        .FindComponent<userver::components::Postgres>(
-                            "realmedium-database")
-                        .GetCluster()) {}
+  using Common::Common;
 
   userver::formats::json::Value HandleRequestJsonThrow(
       const userver::server::http::HttpRequest& request,
@@ -75,9 +67,6 @@ class LoginUser final : public userver::server::handlers::HttpHandlerJsonBase {
 
     return response.ExtractValue();
   }
-
- private:
-  userver::storages::postgres::ClusterPtr pg_cluster_;
 };
 
 }  // namespace

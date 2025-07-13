@@ -1,19 +1,14 @@
 #include "tags.hpp"
 
+#include "userver/formats/json/serialize_container.hpp"
+#include "userver/server/handlers/http_handler_json_base.hpp"
+#include "userver/storages/postgres/cluster.hpp"
 #include "userver/components/component.hpp"
 #include "userver/server/handlers/http_handler_json_base.hpp"
 #include "userver/storages/postgres/cluster.hpp"
 #include "userver/storages/postgres/component.hpp"
 
 namespace real_medium::handlers::tags::get {
-
-Handler::Handler(const userver::components::ComponentConfig& config,
-                 const userver::components::ComponentContext& component_context)
-    : HttpHandlerJsonBase(config, component_context),
-      pg_cluster_(component_context
-                      .FindComponent<userver::components::Postgres>(
-                          "realmedium-database")
-                      .GetCluster()) {}
 
 userver::formats::json::Value Handler::HandleRequestJsonThrow(
     const userver::server::http::HttpRequest&,

@@ -6,15 +6,8 @@
 #include "utils/errors.hpp"
 #include "utils/random.hpp"
 #include "validators/validators.hpp"
-namespace real_medium::handlers::users::put {
 
-Handler::Handler(const userver::components::ComponentConfig& config,
-                 const userver::components::ComponentContext& component_context)
-    : HttpHandlerJsonBase(config, component_context),
-      pg_cluster_(component_context
-                      .FindComponent<userver::components::Postgres>(
-                          "realmedium-database")
-                      .GetCluster()) {}
+namespace real_medium::handlers::users::put {
 
 userver::formats::json::Value Handler::HandleRequestJsonThrow(
     const userver::server::http::HttpRequest& request,

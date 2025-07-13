@@ -37,6 +37,8 @@ add_library(${PROJECT_NAME}_objs OBJECT
 		src/cache/articles_cache.cpp
         src/cache/comments_cache.cpp
         src/cache/comments_cache.hpp
+		src/handlers/common.cpp
+		src/handlers/common.hpp
 		src/handlers/profiles/profiles.cpp
 		src/handlers/profiles/profiles.hpp
 		src/handlers/users/users.cpp

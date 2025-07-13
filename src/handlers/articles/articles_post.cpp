@@ -7,15 +7,8 @@
 #include "../../utils/errors.hpp"
 #include "../../utils/slugify.hpp"
 #include "validators/validators.hpp"
-namespace real_medium::handlers::articles::post {
 
-Handler::Handler(const userver::components::ComponentConfig& config,
-                 const userver::components::ComponentContext& context)
-    : HttpHandlerJsonBase(config, context),
-      pg_cluster_(context
-                      .FindComponent<userver::components::Postgres>(
-                          "realmedium-database")
-                      .GetCluster()) {}
+namespace real_medium::handlers::articles::post {
 
 userver::formats::json::Value Handler::HandleRequestJsonThrow(
     const userver::server::http::HttpRequest& request,

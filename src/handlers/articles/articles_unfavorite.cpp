@@ -5,14 +5,6 @@
 
 namespace real_medium::handlers::articles_favorite::del {
 
-Handler::Handler(const userver::components::ComponentConfig& config,
-                 const userver::components::ComponentContext& component_context)
-    : HttpHandlerJsonBase(config, component_context),
-      pg_cluster_(component_context
-                      .FindComponent<userver::components::Postgres>(
-                          "realmedium-database")
-                      .GetCluster()) {}
-
 userver::formats::json::Value Handler::HandleRequestJsonThrow(
     const userver::server::http::HttpRequest& request,
     const userver::formats::json::Value&,

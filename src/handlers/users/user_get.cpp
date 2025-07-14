@@ -8,26 +8,25 @@ namespace real_medium::handlers::users::get {
 userver::formats::json::Value Handler::HandleRequestJsonThrow(
     const userver::server::http::HttpRequest& request,
     const userver::formats::json::Value& /*request_json*/,
-    userver::server::request::RequestContext& context) const {
-  auto user_id = context.GetData<std::optional<std::string>>("id");
+    userver::server::request::RequestContext& context
+) const {
+    auto user_id = context.GetData<std::optional<std::string>>("id");
 
-  const auto result =
-      GetPg().Execute(userver::storages::postgres::ClusterHostType::kMaster,
-                      sql::kFindUserById.data(), user_id);
+    const auto result =
+        GetPg().Execute(userver::storages::postgres::ClusterHostType::kMaster, sql::kFindUserById.data(), user_id);
 
-  if (result.IsEmpty()) {
-    auto& response = request.GetHttpResponse();
-    response.SetStatus(userver::server::http::HttpStatus::kNotFound);
-    return utils::error::MakeError("user_id", "Invalid user_id. Not found.");
-  }
+    if (result.IsEmpty()) {
+        auto& response = request.GetHttpResponse();
+        response.SetStatus(userver::server::http::HttpStatus::kNotFound);
+        return utils::error::MakeError("user_id", "Invalid user_id. Not found.");
+    }
 
-  auto user = result.AsSingleRow<real_medium::models::User>(
-      userver::storages::postgres::kRowTag);
+    auto user = result.AsSingleRow<real_medium::models::User>(userver::storages::postgres::kRowTag);
 
-  userver::formats::json::ValueBuilder builder;
-  builder["user"] = user;
+    userver::formats::json::ValueBuilder builder;
+    builder["user"] = user;
 
-  return builder.ExtractValue();
+    return builder.ExtractValue();
 }
 
 }  // namespace real_medium::handlers::users::get

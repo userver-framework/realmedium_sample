@@ -13,23 +13,24 @@
 namespace real_medium::handlers {
 
 class Common : public userver::server::handlers::HttpHandlerJsonBase {
- public:
-  Common(const userver::components::ComponentConfig& config,
-         const userver::components::ComponentContext& component_context);
+public:
+    Common(
+        const userver::components::ComponentConfig& config,
+        const userver::components::ComponentContext& component_context
+    );
 
-  const real_medium::cache::articles_cache::ArticlesCache& GetArticlesCache()
-      const noexcept {
-    return articles_cache_;
-  }
+    const real_medium::cache::articles_cache::ArticlesCache& GetArticlesCache() const noexcept {
+        return articles_cache_;
+    }
 
-  userver::storages::postgres::Cluster& GetPg() const noexcept {
-    UASSERT(pg_cluster_);
-    return *pg_cluster_;
-  }
+    userver::storages::postgres::Cluster& GetPg() const noexcept {
+        UASSERT(pg_cluster_);
+        return *pg_cluster_;
+    }
 
- private:
-  userver::storages::postgres::ClusterPtr pg_cluster_;
-  const real_medium::cache::articles_cache::ArticlesCache& articles_cache_;
+private:
+    userver::storages::postgres::ClusterPtr pg_cluster_;
+    const real_medium::cache::articles_cache::ArticlesCache& articles_cache_;
 };
 
 }  // namespace real_medium::handlers

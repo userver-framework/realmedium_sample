@@ -6,14 +6,12 @@
 
 namespace real_medium::handlers {
 
-Common::Common(const userver::components::ComponentConfig& config,
-               const userver::components::ComponentContext& component_context)
+Common::Common(
+    const userver::components::ComponentConfig& config,
+    const userver::components::ComponentContext& component_context
+)
     : HttpHandlerJsonBase(config, component_context),
-      pg_cluster_(component_context
-                      .FindComponent<userver::components::Postgres>(
-                          "realmedium-database")
-                      .GetCluster()),
-      articles_cache_(component_context.FindComponent<
-                      real_medium::cache::articles_cache::ArticlesCache>()) {}
+      pg_cluster_(component_context.FindComponent<userver::components::Postgres>("realmedium-database").GetCluster()),
+      articles_cache_(component_context.FindComponent<real_medium::cache::articles_cache::ArticlesCache>()) {}
 
 }  // namespace real_medium::handlers

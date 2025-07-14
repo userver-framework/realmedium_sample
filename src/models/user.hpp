@@ -12,22 +12,19 @@ namespace real_medium::models {
 
 using UserId = std::string;
 struct User final {
-  UserId id;
-  std::string username;
-  std::string email;
-  std::string bio;
-  std::string image;
-  std::string password_hash;
-  std::string salt;
+    UserId id;
+    std::string username;
+    std::string email;
+    std::string bio;
+    std::string image;
+    std::string password_hash;
+    std::string salt;
 
-  auto Introspect() {
-    return std::tie(id, username, email, bio, image, password_hash, salt);
-  }
+    auto Introspect() { return std::tie(id, username, email, bio, image, password_hash, salt); }
 };
 
-userver::formats::json::Value Serialize(
-    const User& user,
-    userver::formats::serialize::To<userver::formats::json::Value>);
+userver::formats::json::Value
+Serialize(const User& user, userver::formats::serialize::To<userver::formats::json::Value>);
 
 }  // namespace real_medium::models
 
@@ -35,7 +32,7 @@ namespace userver::storages::postgres::io {
 
 template <>
 struct CppToUserPg<real_medium::models::User> {
-  static constexpr DBTypeName postgres_name{"real_medium.user"};
+    static constexpr DBTypeName postgres_name{"real_medium.user"};
 };
 
 }  // namespace userver::storages::postgres::io

@@ -38,40 +38,37 @@
 using namespace real_medium::handlers;
 
 int main(int argc, char* argv[]) {
-  userver::server::handlers::auth::RegisterAuthCheckerFactory<
-      real_medium::auth::CheckerFactory>();
+    userver::server::handlers::auth::RegisterAuthCheckerFactory<real_medium::auth::CheckerFactory>();
 
-  auto component_list =
-      userver::components::MinimalServerComponentList()
-          .Append<userver::server::handlers::Ping>()
-          .Append<userver::components::TestsuiteSupport>()
-          .Append<real_medium::cache::articles_cache::ArticlesCache>()
-          .Append<real_medium::cache::comments_cache::CommentsCache>()
-          .Append<userver::components::HttpClient>()
-          .Append<userver::components::Postgres>("realmedium-database")
-          .Append<userver::clients::dns::
-                      Component>()  // real_medium::handlers::users_login::post
-          .Append<userver::server::handlers::TestsControl>()
-          .Append<real_medium::handlers::users::put::Handler>()
-          .Append<real_medium::handlers::users::get::Handler>()
-          .Append<real_medium::handlers::comments::del::Handler>()
-          .Append<real_medium::handlers::comments::post::Handler>()
-          .Append<real_medium::handlers::comments::get::Handler>()
-          .Append<real_medium::handlers::users::post::RegisterUser>()
-          .Append<real_medium::handlers::profiles::get::Handler>()
-          .Append<real_medium::handlers::profiles::post::Handler>()
-          .Append<real_medium::handlers::profiles::del::Handler>()
-          .Append<real_medium::handlers::tags::get::Handler>()
-          .Append<real_medium::handlers::articles::feed::get::Handler>()
-          .Append<real_medium::handlers::articles::get::Handler>()
-          .Append<real_medium::handlers::articles::post::Handler>()
-          .Append<real_medium::handlers::articles_slug::get::Handler>()
-          .Append<real_medium::handlers::articles_slug::put::Handler>()
-          .Append<real_medium::handlers::articles_slug::del::Handler>()
-          .Append<real_medium::handlers::articles_favorite::post::Handler>()
-          .Append<real_medium::handlers::articles_favorite::del::Handler>();
+    auto component_list = userver::components::MinimalServerComponentList()
+                              .Append<userver::server::handlers::Ping>()
+                              .Append<userver::components::TestsuiteSupport>()
+                              .Append<real_medium::cache::articles_cache::ArticlesCache>()
+                              .Append<real_medium::cache::comments_cache::CommentsCache>()
+                              .Append<userver::components::HttpClient>()
+                              .Append<userver::components::Postgres>("realmedium-database")
+                              .Append<userver::clients::dns::Component>()  // real_medium::handlers::users_login::post
+                              .Append<userver::server::handlers::TestsControl>()
+                              .Append<real_medium::handlers::users::put::Handler>()
+                              .Append<real_medium::handlers::users::get::Handler>()
+                              .Append<real_medium::handlers::comments::del::Handler>()
+                              .Append<real_medium::handlers::comments::post::Handler>()
+                              .Append<real_medium::handlers::comments::get::Handler>()
+                              .Append<real_medium::handlers::users::post::RegisterUser>()
+                              .Append<real_medium::handlers::profiles::get::Handler>()
+                              .Append<real_medium::handlers::profiles::post::Handler>()
+                              .Append<real_medium::handlers::profiles::del::Handler>()
+                              .Append<real_medium::handlers::tags::get::Handler>()
+                              .Append<real_medium::handlers::articles::feed::get::Handler>()
+                              .Append<real_medium::handlers::articles::get::Handler>()
+                              .Append<real_medium::handlers::articles::post::Handler>()
+                              .Append<real_medium::handlers::articles_slug::get::Handler>()
+                              .Append<real_medium::handlers::articles_slug::put::Handler>()
+                              .Append<real_medium::handlers::articles_slug::del::Handler>()
+                              .Append<real_medium::handlers::articles_favorite::post::Handler>()
+                              .Append<real_medium::handlers::articles_favorite::del::Handler>();
 
-  real_medium::handlers::users_login::post::AppendLoginUser(component_list);
+    real_medium::handlers::users_login::post::AppendLoginUser(component_list);
 
-  return userver::utils::DaemonMain(argc, argv, component_list);
+    return userver::utils::DaemonMain(argc, argv, component_list);
 }

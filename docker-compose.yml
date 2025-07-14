@@ -37,7 +37,6 @@ services:
           - CMAKE_OPTIONS
         volumes:
           - .:/realmedium:rw
-          - ./third_party/userver/tools/docker:/tools:ro
           - ${TC_CORES_DIR:-./.cores}:/cores:rw
         ports:
           - 8080:8080

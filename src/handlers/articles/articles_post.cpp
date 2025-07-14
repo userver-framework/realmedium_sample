@@ -1,28 +1,21 @@
 #include "articles_post.hpp"
-#include <userver/logging/log.hpp>
 #include <docs/api/api.hpp>
+#include <userver/logging/log.hpp>
 
 #include "../../db/sql.hpp"
 #include "../../models/article.hpp"
 #include "../../utils/errors.hpp"
 #include "../../utils/slugify.hpp"
 #include "validators/validators.hpp"
-namespace real_medium::handlers::articles::post {
 
-Handler::Handler(const userver::components::ComponentConfig& config,
-                 const userver::components::ComponentContext& context)
-    : HttpHandlerJsonBase(config, context),
-      pg_cluster_(context
-                      .FindComponent<userver::components::Postgres>(
-                          "realmedium-database")
-                      .GetCluster()) {}
+namespace real_medium::handlers::articles::post {
 
 userver::formats::json::Value Handler::HandleRequestJsonThrow(
     const userver::server::http::HttpRequest& request,
     const userver::formats::json::Value& request_json,
     userver::server::request::RequestContext& context) const {
   handlers::CreateArticleRequest createArticleRequest =
-          request_json["article"].As<handlers::CreateArticleRequest>();
+      request_json["article"].As<handlers::CreateArticleRequest>();
   try {
     validator::validate(createArticleRequest);
   } catch (const real_medium::utils::error::ValidationException& ex) {
@@ -41,7 +34,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     const auto slug =
         real_medium::utils::slug::Slugify(createArticleRequest.title.value());
 
-    const auto res = pg_cluster_->Execute(
+    const auto res = GetPg().Execute(
         userver::storages::postgres::ClusterHostType::kMaster,
         real_medium::sql::kCreateArticle.data(), createArticleRequest.title,
         slug, createArticleRequest.body, createArticleRequest.description,
@@ -58,7 +51,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     throw;
   }
 
-  const auto res = pg_cluster_->Execute(
+  const auto res = GetPg().Execute(
       userver::storages::postgres::ClusterHostType::kMaster,
       real_medium::sql::kGetArticleWithAuthorProfile.data(), articleId, userId);
 

@@ -8,13 +8,6 @@
 #include "validators/validators.hpp"
 
 namespace real_medium::handlers::articles_slug::put {
-Handler::Handler(const userver::components::ComponentConfig& config,
-                 const userver::components::ComponentContext& context)
-    : HttpHandlerJsonBase(config, context),
-      pg_cluster_(context
-                      .FindComponent<userver::components::Postgres>(
-                          "realmedium-database")
-                      .GetCluster()) {}
 
 userver::formats::json::Value Handler::HandleRequestJsonThrow(
     const userver::server::http::HttpRequest& request,
@@ -22,9 +15,9 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     userver::server::request::RequestContext& context) const {
   auto slug = request.GetPathArg("slug");
   handlers::UpdateArticleRequest updateRequest =
-          request_json["article"].As<handlers::UpdateArticleRequest>();
+      request_json["article"].As<handlers::UpdateArticleRequest>();
   try {
-      validator::validate(updateRequest);
+    validator::validate(updateRequest);
   } catch (const real_medium::utils::error::ValidationException& ex) {
     request.SetResponseStatus(
         userver::server::http::HttpStatus::kUnprocessableEntity);
@@ -39,11 +32,11 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
             ? std::make_optional<std::string>(
                   real_medium::utils::slug::Slugify(*updateRequest.title))
             : std::nullopt;
-    const auto res = pg_cluster_->Execute(
-        userver::storages::postgres::ClusterHostType::kMaster,
-        real_medium::sql::kUpdateArticleBySlug.data(), slug, userId,
-        updateRequest.title, newSlug, updateRequest.description,
-        updateRequest.body);
+    const auto res =
+        GetPg().Execute(userver::storages::postgres::ClusterHostType::kMaster,
+                        real_medium::sql::kUpdateArticleBySlug.data(), slug,
+                        userId, updateRequest.title, newSlug,
+                        updateRequest.description, updateRequest.body);
     if (res.IsEmpty()) {
       request.SetResponseStatus(userver::server::http::HttpStatus::kNotFound);
       return {};
@@ -58,7 +51,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     }
     throw;
   }
-  const auto res = pg_cluster_->Execute(
+  const auto res = GetPg().Execute(
       userver::storages::postgres::ClusterHostType::kMaster,
       real_medium::sql::kGetArticleWithAuthorProfile.data(), articleId, userId);
 

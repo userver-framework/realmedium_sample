@@ -5,7 +5,8 @@
 namespace real_medium::dto {
 
 template <>
-handlers::FeedArticleFilterDTO Parse(const userver::server::http::HttpRequest& request) {
+handlers::FeedArticleFilterDTO Parse(
+    const userver::server::http::HttpRequest& request) {
   handlers::FeedArticleFilterDTO filter;
   if (request.HasArg("limit")) {
     filter.limit = boost::lexical_cast<std::int32_t>(request.GetArg("limit"));
@@ -19,7 +20,8 @@ handlers::FeedArticleFilterDTO Parse(const userver::server::http::HttpRequest& r
 }
 
 template <>
-handlers::ArticleFilterDTO Parse(const userver::server::http::HttpRequest& request) {
+handlers::ArticleFilterDTO Parse(
+    const userver::server::http::HttpRequest& request) {
   handlers::ArticleFilterDTO filter;
   if (request.HasArg("tag")) {
     filter.tag = request.GetArg("tag");

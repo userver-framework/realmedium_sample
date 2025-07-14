@@ -1,35 +1,15 @@
 #pragma once
 
-#include <optional>
-#include <string>
-#include <tuple>
-#include <userver/formats/json/value_builder.hpp>
 #include <userver/storages/postgres/io/io_fwd.hpp>
 #include <userver/storages/postgres/io/pg_types.hpp>
-#include "db/types.hpp"
 
-namespace real_medium::models {
-
-struct Profile final {
-  std::string username;
-  std::string bio;
-  std::string image;
-  bool following{false};
-  auto Introspect() { return std::tie(username, bio, image, following); }
-};
-
-userver::formats::json::Value Serialize(
-    const Profile& profile,
-    userver::formats::serialize::To<userver::formats::json::Value>);
-
-}  // namespace real_medium::models
+#include <docs/api/api.hpp>
 
 namespace userver::storages::postgres::io {
 
 template <>
-struct CppToUserPg<real_medium::models::Profile> {
-  static constexpr DBTypeName postgres_name{
-      real_medium::sql::types::kProfile.data()};
+struct CppToUserPg<real_medium::handlers::Profile> {
+  static constexpr DBTypeName postgres_name{"real_medium.profile"};
 };
 
 }  // namespace userver::storages::postgres::io

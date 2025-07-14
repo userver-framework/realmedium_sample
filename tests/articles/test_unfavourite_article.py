@@ -68,7 +68,7 @@ async def test_unfavourite_article(service_client):
     assert response.status == HTTPStatus.OK
     assert validate_article(article, response)
 
-    await service_client.invalidate_caches()
+    await service_client.update_server_state()
     response = await get_article(service_client, article, another_user_token)
     assert response.status == HTTPStatus.OK
     assert validate_article(article, response)
@@ -79,7 +79,7 @@ async def test_unfavourite_article(service_client):
     assert response.status == HTTPStatus.OK
     assert validate_article(article, response)
 
-    await service_client.invalidate_caches()
+    await service_client.update_server_state()
     response = await get_article(service_client, article, another_user_token)
     assert response.status == HTTPStatus.OK
     assert validate_article(article, response)
@@ -88,7 +88,7 @@ async def test_unfavourite_article(service_client):
     assert response.status == HTTPStatus.OK
     assert validate_article(article, response)
 
-    await service_client.invalidate_caches()
+    await service_client.update_server_state()
     response = await get_article(service_client, article, user_token)
     assert response.status == HTTPStatus.OK
     assert validate_article(article, response)

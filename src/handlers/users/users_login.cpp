@@ -1,15 +1,13 @@
 #include "users_login.hpp"
 
-#include <userver/components/component_config.hpp>
-#include <userver/components/component_context.hpp>
+#include <docs/api/api.hpp>
 #include <userver/crypto/hash.hpp>
-#include <userver/server/handlers/http_handler_json_base.hpp>
 #include <userver/server/http/http_status.hpp>
 #include <userver/storages/postgres/cluster.hpp>
 #include <userver/storages/postgres/component.hpp>
-#include <docs/api/api.hpp>
 
 #include "db/sql.hpp"
+#include "handlers/common.hpp"
 #include "models/user.hpp"
 #include "utils/errors.hpp"
 #include "validators/validators.hpp"
@@ -18,17 +16,11 @@ namespace real_medium::handlers::users_login::post {
 
 namespace {
 
-class LoginUser final : public userver::server::handlers::HttpHandlerJsonBase {
+class LoginUser final : public Common {
  public:
   static constexpr std::string_view kName = "handler-login-user";
 
-  LoginUser(const userver::components::ComponentConfig& config,
-            const userver::components::ComponentContext& component_context)
-      : HttpHandlerJsonBase(config, component_context),
-        pg_cluster_(component_context
-                        .FindComponent<userver::components::Postgres>(
-                            "realmedium-database")
-                        .GetCluster()) {}
+  using Common::Common;
 
   userver::formats::json::Value HandleRequestJsonThrow(
       const userver::server::http::HttpRequest& request,
@@ -45,22 +37,21 @@ class LoginUser final : public userver::server::handlers::HttpHandlerJsonBase {
       return err.GetDetails();
     }
 
-    auto salt = pg_cluster_->Execute(
-        userver::storages::postgres::ClusterHostType::kMaster,
-        sql::kGetSaltByEmail.data(),
-        user_login.email);
+    auto salt =
+        GetPg().Execute(userver::storages::postgres::ClusterHostType::kMaster,
+                        sql::kGetSaltByEmail.data(), user_login.email);
     if (salt.IsEmpty()) {
       auto& response = request.GetHttpResponse();
       response.SetStatus(userver::server::http::HttpStatus::kNotFound);
       return {};
     }
-    auto password_hash =
-        userver::crypto::hash::Sha256(user_login.password.value() + salt.AsSingleRow<std::string>());
+    auto password_hash = userver::crypto::hash::Sha256(
+        user_login.password.value() + salt.AsSingleRow<std::string>());
 
-    auto userResult = pg_cluster_->Execute(
-        userver::storages::postgres::ClusterHostType::kMaster,
-        sql::kSelectUserByEmailAndPassword.data(), user_login.email,
-        password_hash);
+    auto userResult =
+        GetPg().Execute(userver::storages::postgres::ClusterHostType::kMaster,
+                        sql::kSelectUserByEmailAndPassword.data(),
+                        user_login.email, password_hash);
 
     if (userResult.IsEmpty()) {
       auto& response = request.GetHttpResponse();
@@ -76,9 +67,6 @@ class LoginUser final : public userver::server::handlers::HttpHandlerJsonBase {
 
     return response.ExtractValue();
   }
-
- private:
-  userver::storages::postgres::ClusterPtr pg_cluster_;
 };
 
 }  // namespace

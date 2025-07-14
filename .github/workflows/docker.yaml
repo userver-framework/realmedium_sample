@@ -1,6 +1,8 @@
-name: Docker build
+name: urealmedium Docker build
 
 'on':
+    schedule:
+      - cron: '30 5 * * 1'  # Every Monday at 5:30
     pull_request:
     push:
         branches:
@@ -15,12 +17,12 @@ jobs:
     tests:
         runs-on: ubuntu-latest
         steps:
-          - uses: actions/checkout@v2
+          - uses: actions/checkout@v4
             with:
                 submodules: true
 
           - name: Reuse ccache directory
-            uses: actions/cache@v2
+            uses: actions/cache@v4
             with:
                 path: .ccache
                 key: 'ccache-dir-${{github.ref}}_run-${{github.run_number}}'

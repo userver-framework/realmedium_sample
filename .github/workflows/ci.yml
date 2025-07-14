@@ -1,6 +1,8 @@
-name: CI
+name: urealmedium CI
 
 'on':
+    schedule:
+      - cron: '30 5 * * 1'  # Every Monday at 5:30
     pull_request:
     push:
         branches:
@@ -42,15 +44,14 @@ jobs:
 
           - name: Install packages
             run: |
+                (cd third_party && git clone -b develop --single-branch --depth 1 https://github.com/userver-framework/userver.git)
                 sudo apt update
-                sudo apt install --allow-downgrades -y postgresql $(cat third_party/userver/scripts/docs/en/deps/${{matrix.os}}.md | tr '\n' ' ')
-                sudo apt install --allow-downgrades -y pep8 $(cat third_party/userver/scripts/docs/en/deps/${{matrix.os}}.md | tr '\n' ' ')
+                sudo apt install --allow-downgrades -y pycodestyle postgresql $(cat third_party/userver/scripts/docs/en/deps/${{matrix.os}}.md | tr '\n' ' ')
    
           - name: Reinstall postgres 14
             run: |
                 sudo apt purge libpq5 libpq-dev postgresql-*
                 sudo apt install -y postgresql-14 postgresql-client-14 postgresql-server-dev-14
-
 
           - name: Setup ccache
             run: |
@@ -81,11 +82,11 @@ jobs:
 
           - name: Test run after install
             if: matrix.make == 'test-release'
-            run: >-
-               ./local_installation/bin/realmedium_sample
-               --config=./local_installation/etc/realmedium_sample/static_config.yaml
-               --config_vars=./local_installation/etc/realmedium_sample/config_vars.yaml
-               &
+            run: |
+               ./local_installation/bin/realmedium_sample \
+                   --config=./local_installation/etc/realmedium_sample/config.yaml \
+                   --config_vars=./local_installation/etc/realmedium_sample/config_vars.yaml \
+                   &
 
           - name: Check work run service
             if: matrix.make == 'test-release'

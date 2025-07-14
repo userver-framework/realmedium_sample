@@ -3,7 +3,6 @@
 #include "user_validators.hpp"
 #include "utils/errors.hpp"
 
-
 namespace real_medium::validator {
 
 void validate(const handlers::UserLoginDTO& dto) {

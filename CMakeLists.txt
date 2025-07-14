@@ -37,6 +37,8 @@ add_library(${PROJECT_NAME}_objs OBJECT
 		src/cache/articles_cache.cpp
         src/cache/comments_cache.cpp
         src/cache/comments_cache.hpp
+		src/handlers/common.cpp
+		src/handlers/common.hpp
 		src/handlers/profiles/profiles.cpp
 		src/handlers/profiles/profiles.hpp
 		src/handlers/users/users.cpp
@@ -80,7 +82,6 @@ add_library(${PROJECT_NAME}_objs OBJECT
 		src/dto/comment.hpp
 		src/dto/comment.cpp
 		src/db/sql.hpp
-		src/db/types.hpp
 		src/models/user.hpp
 		src/models/user.cpp
 		src/models/comment.hpp
@@ -88,7 +89,6 @@ add_library(${PROJECT_NAME}_objs OBJECT
 		src/models/article.hpp
 		src/models/article.cpp
 		src/models/profile.hpp
-		src/models/profile.cpp
 		src/validators/user_validators.hpp
 		src/validators/user_validators.cpp
 		src/validators/length_validator.hpp
@@ -118,10 +118,8 @@ target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::core userver::postgre
 
 file(GLOB_RECURSE SCHEMAS ${CMAKE_CURRENT_SOURCE_DIR}/docs/*.yaml)
 userver_target_generate_chaotic(${PROJECT_NAME}-chgen
-    ARGS
-        -n "/components/schemas/([^/]*)/=real_medium::handlers::{0}"
-        -f "(.*)={0}"
-        --generate-serializers
+    LAYOUT "/components/schemas/([^/]*)/=real_medium::handlers::{0}"
+    GENERATE_SERIALIZERS
     OUTPUT_DIR
         ${CMAKE_CURRENT_BINARY_DIR}/src
     SCHEMAS
@@ -153,7 +151,9 @@ target_link_libraries(${PROJECT_NAME}_unittest PRIVATE ${PROJECT_NAME}_objs user
 add_google_tests(${PROJECT_NAME}_unittest)
 
 # Functional Tests
-add_subdirectory(tests)
+userver_testsuite_add_simple(
+  REQUIREMENTS ${CMAKE_CURRENT_SOURCE_DIR}/tests/requirements.txt
+)
 
 # Install
 include(GNUInstallDirs)

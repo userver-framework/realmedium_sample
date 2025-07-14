@@ -7,7 +7,6 @@
 #include <userver/storages/postgres/io/chrono.hpp>
 #include <userver/storages/postgres/io/pg_types.hpp>
 #include <vector>
-#include "../db/types.hpp"
 #include "profile.hpp"
 #include "user.hpp"
 
@@ -47,7 +46,7 @@ struct TaggedArticleWithProfile {
   std::optional<std::vector<std::string>> tags;
   bool isFavorited;
   std::int64_t favoritesCount;
-  Profile authorProfile;
+  handlers::Profile authorProfile;
 
   auto Introspect() {
     return std::tie(articleId, title, slug, body, description, createdAt,
@@ -67,13 +66,12 @@ namespace userver::storages::postgres::io {
 template <>
 struct CppToUserPg<real_medium::models::TaggedArticleWithProfile> {
   static constexpr DBTypeName postgres_name{
-      real_medium::sql::types::kTaggedArticleWithProfile.data()};
+      "real_medium.tagged_article_with_author_profile"};
 };
 
 template <>
 struct CppToUserPg<real_medium::models::FullArticleInfo> {
-  static constexpr DBTypeName postgres_name{
-      real_medium::sql::types::kFullArticleInfo.data()};
+  static constexpr DBTypeName postgres_name{"real_medium.full_article_info"};
 };
 
 }  // namespace userver::storages::postgres::io

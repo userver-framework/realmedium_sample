@@ -66,14 +66,14 @@ async def test_delete_article(service_client):
     response = await delete_article(service_client, article, user_token)
     assert response.status == HTTPStatus.OK
 
-    await service_client.invalidate_caches()
+    await service_client.update_server_state()
     response = await get_article(service_client, article, user_token)
     assert response.status == HTTPStatus.NOT_FOUND
 
     response = await create_article(service_client, article, user_token)
     assert response.status == HTTPStatus.OK
 
-    await service_client.invalidate_caches()
+    await service_client.update_server_state()
     response = await get_comments(service_client, article, user_token)
     assert response.status == HTTPStatus.OK
     assert validate_comments(CommentList(0), response)

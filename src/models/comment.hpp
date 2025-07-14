@@ -20,7 +20,7 @@ struct Comment {
   userver::storages::postgres::TimePointTz updated_at;
   std::string body;
   std::string user_id;
-  real_medium::models::Profile author;
+  real_medium::handlers::Profile author;
 
   auto Introspect() {
     return std::tie(id, created_at, updated_at, body, user_id, author);
@@ -53,8 +53,7 @@ namespace userver::storages::postgres::io {
 
 template <>
 struct CppToUserPg<real_medium::models::CachedComment> {
-  static constexpr DBTypeName postgres_name{
-      real_medium::sql::types::kComment.data()};
+  static constexpr DBTypeName postgres_name{"real_medium.comment"};
 };
 
 }  // namespace userver::storages::postgres::io

@@ -39,21 +39,25 @@ async def get_profile(service_client, user, token):
 
 
 async def follow_user(service_client, user, token):
-    return await service_client.post(
+    result = await service_client.post(
         Routes.FOLLOW_PROFILE.format(username=user.username),
         headers={'Authorization': token},
     )
+    await service_client.invalidate_caches(cache_names=['articles-cache'])
+    return result
 
 
 async def unfollow_user(service_client, user, token):
-    return await service_client.delete(
+    result = await service_client.delete(
         Routes.UNFOLLOW_PROFILE.format(username=user.username),
         headers={'Authorization': token},
     )
+    await service_client.invalidate_caches(cache_names=['articles-cache'])
+    return result
 
 
 async def create_article(service_client, article, token):
-    return await service_client.post(
+    result = await service_client.post(
         Routes.CREATE_ARTICLE,
         json=model_dump(
             article,
@@ -62,6 +66,11 @@ async def create_article(service_client, article, token):
         ),
         headers={'Authorization': token},
     )
+    await service_client.invalidate_caches(cache_names=[
+        'articles-cache',
+        'comments-cache',
+    ])
+    return result
 
 
 async def get_article(service_client, article, token):
@@ -84,32 +93,40 @@ async def update_article(service_client, article, slug, token):
 
 
 async def delete_article(service_client, article, token):
-    return await service_client.delete(
+    result = await service_client.delete(
         Routes.UPDATE_ARTICLE.format(slug=article.slug),
         headers={'Authorization': token},
     )
+    await service_client.invalidate_caches(cache_names=['articles-cache'])
+    return result
 
 
 async def favourite_article(service_client, article, token):
-    return await service_client.post(
+    result = await service_client.post(
         Routes.FAVOURITE_ARTICLE.format(slug=article.slug),
         headers={'Authorization': token},
     )
+    await service_client.invalidate_caches(cache_names=['articles-cache'])
+    return result
 
 
 async def unfavourite_article(service_client, article, token):
-    return await service_client.delete(
+    result = await service_client.delete(
         Routes.UNFAVOURITE_ARTICLE.format(slug=article.slug),
         headers={'Authorization': token},
     )
+    await service_client.invalidate_caches(cache_names=['articles-cache'])
+    return result
 
 
 async def add_comment(service_client, comment, article, token):
-    return await service_client.post(
+    result = await service_client.post(
         Routes.ADD_COMMENT.format(slug=article.slug),
         json=model_dump(comment, include=RequiredFields.ADD_COMMENT.value),
         headers={'Authorization': token},
     )
+    await service_client.invalidate_caches(cache_names=['comments-cache'])
+    return result
 
 
 async def get_comments(service_client, article, token):
@@ -120,10 +137,12 @@ async def get_comments(service_client, article, token):
 
 
 async def delete_comment(service_client, comment_id, article, token):
-    return await service_client.delete(
+    result = await service_client.delete(
         Routes.DELETE_COMMENT.format(slug=article.slug, id=comment_id),
         headers={'Authorization': token},
     )
+    await service_client.invalidate_caches(cache_names=['comments-cache'])
+    return result
 
 
 async def feed_articles(service_client, token, limit, offset):

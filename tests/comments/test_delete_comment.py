@@ -33,7 +33,7 @@ async def test_delete_self_comment(service_client):
     assert response.status == HTTPStatus.OK
 
     commentList = CommentList(0)
-    await service_client.invalidate_caches()
+    await service_client.update_server_state()
     response = await get_comments(service_client, article, user_token)
     assert response.status == HTTPStatus.OK
     assert validate_comments(commentList, response)
@@ -66,9 +66,9 @@ async def test_delete_not_self_comment(service_client):
     response = await delete_comment(service_client, 1, article, user_token)
     assert response.status == HTTPStatus.FORBIDDEN
 
-    await service_client.invalidate_caches()
+    await service_client.update_server_state()
     commentList = CommentList(init_comments=[comment])
-    await service_client.invalidate_caches()
+    await service_client.update_server_state()
     response = await get_comments(service_client, article, user_token)
     assert response.status == HTTPStatus.OK
     assert validate_comments(commentList, response)

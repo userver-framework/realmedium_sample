@@ -15,14 +15,9 @@ class AuthCheckerBearer final
  public:
   using AuthCheckResult = userver::server::handlers::auth::AuthCheckResult;
 
-  AuthCheckerBearer(
-      const userver::components::ComponentContext& component_context,
-      bool is_required)
-      : pg_cluster_(component_context
-                        .FindComponent<userver::components::Postgres>(
-                            "realmedium-database")
-                        .GetCluster()),
-        is_required_(is_required) {}
+  AuthCheckerBearer(userver::storages::postgres::ClusterPtr pg_cluster,
+                    bool is_required)
+      : pg_cluster_(std::move(pg_cluster)), is_required_(is_required) {}
 
   [[nodiscard]] AuthCheckResult CheckAuth(
       const userver::server::http::HttpRequest& request,
@@ -32,7 +27,7 @@ class AuthCheckerBearer final
 
  private:
   userver::storages::postgres::ClusterPtr pg_cluster_;
-  bool is_required_;
+  const bool is_required_;
 };
 
 AuthCheckerBearer::AuthCheckResult AuthCheckerBearer::CheckAuth(
@@ -89,12 +84,19 @@ AuthCheckerBearer::AuthCheckResult AuthCheckerBearer::CheckAuth(
   return {};
 }
 
-userver::server::handlers::auth::AuthCheckerBasePtr CheckerFactory::operator()(
-    const userver::components::ComponentContext& context,
-    const userver::server::handlers::auth::HandlerAuthConfig& auth_config,
-    const userver::server::handlers::auth::AuthCheckerSettings&) const {
+CheckerFactory::CheckerFactory(
+    const userver::components::ComponentContext& context)
+    : pg_cluster_(context
+                      .FindComponent<userver::components::Postgres>(
+                          "realmedium-database")
+                      .GetCluster()) {}
+
+userver::server::handlers::auth::AuthCheckerBasePtr
+CheckerFactory::MakeAuthChecker(
+    const userver::server::handlers::auth::HandlerAuthConfig& auth_config)
+    const {
   auto is_required = auth_config["required"].As<bool>(false);
-  return std::make_shared<AuthCheckerBearer>(context, is_required);
+  return std::make_shared<AuthCheckerBearer>(pg_cluster_, is_required);
 }
 
 }  // namespace real_medium::auth

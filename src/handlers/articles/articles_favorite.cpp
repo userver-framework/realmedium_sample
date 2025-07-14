@@ -1,16 +1,11 @@
 #include "articles_favorite.hpp"
+
+#include <userver/formats/json/serialize_container.hpp>
+
 #include "db/sql.hpp"
 #include "dto/article.hpp"
 
 namespace real_medium::handlers::articles_favorite::post {
-
-Handler::Handler(const userver::components::ComponentConfig& config,
-                 const userver::components::ComponentContext& component_context)
-    : HttpHandlerJsonBase(config, component_context),
-      pg_cluster_(component_context
-                      .FindComponent<userver::components::Postgres>(
-                          "realmedium-database")
-                      .GetCluster()) {}
 
 userver::formats::json::Value Handler::HandleRequestJsonThrow(
     const userver::server::http::HttpRequest& request,
@@ -20,9 +15,9 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   auto& slug = request.GetPathArg("slug");
 
   auto transaction =
-      pg_cluster_->Begin("favorite_article_transaction",
-                         userver::storages::postgres::ClusterHostType::kMaster,
-                         userver::storages::postgres::Transaction::RW);
+      GetPg().Begin("favorite_article_transaction",
+                    userver::storages::postgres::ClusterHostType::kMaster,
+                    userver::storages::postgres::Transaction::RW);
 
   auto res =
       transaction.Execute(sql::kInsertFavoritePair.data(), user_id, slug);
@@ -34,7 +29,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     transaction.Commit();
   }
 
-  const auto get_article_res = pg_cluster_->Execute(
+  const auto get_article_res = GetPg().Execute(
       userver::storages::postgres::ClusterHostType::kSlave,
       real_medium::sql::kGetArticleWithAuthorProfileBySlug.data(), slug,
       user_id);

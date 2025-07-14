@@ -1,8 +1,8 @@
 #include <docs/api/api.hpp>
 
-#include "profiles_follow_delete.hpp"
 #include "db/sql.hpp"
 #include "models/profile.hpp"
+#include "profiles_follow_delete.hpp"
 #include "userver/formats/yaml/value_builder.hpp"
 #include "userver/server/handlers/http_handler_base.hpp"
 #include "userver/storages/postgres/cluster.hpp"
@@ -15,14 +15,6 @@ using namespace userver::server::request;
 using namespace userver::storages::postgres;
 
 namespace real_medium::handlers::profiles::del {
-
-Handler::Handler(const userver::components::ComponentConfig& config,
-                 const userver::components::ComponentContext& component_context)
-    : HttpHandlerJsonBase(config, component_context),
-      pg_cluster_(component_context
-                      .FindComponent<userver::components::Postgres>(
-                          "realmedium-database")
-                      .GetCluster()) {}
 
 userver::formats::json::Value Handler::HandleRequestJsonThrow(
     const userver::server::http::HttpRequest& request,
@@ -37,8 +29,8 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   }
 
   const auto res_find_id_username =
-      pg_cluster_->Execute(userver::storages::postgres::ClusterHostType::kSlave,
-                           sql::kFindUserIDByUsername.data(), username);
+      GetPg().Execute(userver::storages::postgres::ClusterHostType::kSlave,
+                      sql::kFindUserIDByUsername.data(), username);
   if (res_find_id_username.IsEmpty()) {
     auto& response = request.GetHttpResponse();
     response.SetStatus(userver::server::http::HttpStatus::kNotFound);
@@ -55,12 +47,11 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   }
 
   const auto res_unfollowing =
-      pg_cluster_->Execute(userver::storages::postgres::ClusterHostType::kSlave,
-                           sql::KUnFollowingUser.data(), username_id, user_id);
+      GetPg().Execute(userver::storages::postgres::ClusterHostType::kSlave,
+                      sql::KUnFollowingUser.data(), username_id, user_id);
 
-  const auto profile =
-      res_unfollowing.AsSingleRow<handlers::Profile>(
-          userver::storages::postgres::kRowTag);
+  const auto profile = res_unfollowing.AsSingleRow<handlers::Profile>(
+      userver::storages::postgres::kRowTag);
 
   if (profile.following) {
     auto& response = request.GetHttpResponse();

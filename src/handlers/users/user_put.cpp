@@ -1,20 +1,13 @@
 #include "user_put.hpp"
-#include <userver/crypto/hash.hpp>
 #include <docs/api/api.hpp>
+#include <userver/crypto/hash.hpp>
 #include "db/sql.hpp"
 #include "models/user.hpp"
 #include "utils/errors.hpp"
 #include "utils/random.hpp"
 #include "validators/validators.hpp"
-namespace real_medium::handlers::users::put {
 
-Handler::Handler(const userver::components::ComponentConfig& config,
-                 const userver::components::ComponentContext& component_context)
-    : HttpHandlerJsonBase(config, component_context),
-      pg_cluster_(component_context
-                      .FindComponent<userver::components::Postgres>(
-                          "realmedium-database")
-                      .GetCluster()) {}
+namespace real_medium::handlers::users::put {
 
 userver::formats::json::Value Handler::HandleRequestJsonThrow(
     const userver::server::http::HttpRequest& request,
@@ -37,11 +30,11 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   std::optional<std::string> salt = std::nullopt;
   if (user_change_data.password) {
     salt = utils::random::GenerateSalt();
-    password_hash =
-        userver::crypto::hash::Sha256(user_change_data.password.value() + salt.value());
+    password_hash = userver::crypto::hash::Sha256(
+        user_change_data.password.value() + salt.value());
   }
 
-  const auto result = pg_cluster_->Execute(
+  const auto result = GetPg().Execute(
       userver::storages::postgres::ClusterHostType::kMaster,
       sql::kUpdateUser.data(), user_id, user_change_data.username,
       user_change_data.email, user_change_data.bio, user_change_data.image,

@@ -32,11 +32,11 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
             ? std::make_optional<std::string>(
                   real_medium::utils::slug::Slugify(*updateRequest.title))
             : std::nullopt;
-    const auto res = pg_cluster_->Execute(
-        userver::storages::postgres::ClusterHostType::kMaster,
-        real_medium::sql::kUpdateArticleBySlug.data(), slug, userId,
-        updateRequest.title, newSlug, updateRequest.description,
-        updateRequest.body);
+    const auto res =
+        GetPg().Execute(userver::storages::postgres::ClusterHostType::kMaster,
+                        real_medium::sql::kUpdateArticleBySlug.data(), slug,
+                        userId, updateRequest.title, newSlug,
+                        updateRequest.description, updateRequest.body);
     if (res.IsEmpty()) {
       request.SetResponseStatus(userver::server::http::HttpStatus::kNotFound);
       return {};
@@ -51,7 +51,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     }
     throw;
   }
-  const auto res = pg_cluster_->Execute(
+  const auto res = GetPg().Execute(
       userver::storages::postgres::ClusterHostType::kMaster,
       real_medium::sql::kGetArticleWithAuthorProfile.data(), articleId, userId);
 

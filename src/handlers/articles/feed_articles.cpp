@@ -25,7 +25,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   }
 
   auto user_id = context.GetData<std::optional<std::string>>("id");
-  auto data = cache_.Get();
+  auto data = GetArticlesCache().Get();
   auto articles = data->getFeed(filter, user_id.value());
   userver::formats::json::ValueBuilder builder;
   builder["articles"] = userver::formats::common::Type::kArray;

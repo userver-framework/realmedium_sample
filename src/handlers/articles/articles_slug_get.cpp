@@ -12,7 +12,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   const auto& slug = request.GetPathArg("slug");
   const std::optional<std::string> userId =
       context.GetData<std::optional<std::string>>("id");
-  auto data = cache_.Get();
+  auto data = GetArticlesCache().Get();
   auto article = data->findArticleBySlug(slug);
   if (article == nullptr) {
     request.SetResponseStatus(userver::server::http::HttpStatus::kNotFound);

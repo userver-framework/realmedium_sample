@@ -35,7 +35,7 @@ userver::formats::json::Value RegisterUser::HandleRequestJsonThrow(
       userver::crypto::hash::Sha256(user_register.password.value() + salt);
   models::User result_user;
   try {
-    auto query_result = pg_cluster_->Execute(
+    auto query_result = GetPg().Execute(
         userver::storages::postgres::ClusterHostType::kMaster,
         sql::kInsertUser.data(), user_register.username, user_register.email,
         user_register.bio, user_register.image, hash_password, salt);

@@ -11,14 +11,6 @@
 
 namespace real_medium::handlers::comments::post {
 
-Handler::Handler(const userver::components::ComponentConfig& config,
-                 const userver::components::ComponentContext& component_context)
-    : HttpHandlerJsonBase(config, component_context),
-      pg_cluster_(component_context
-                      .FindComponent<userver::components::Postgres>(
-                          "realmedium-database")
-                      .GetCluster()) {}
-
 userver::formats::json::Value Handler::HandleRequestJsonThrow(
     const userver::server::http::HttpRequest& request,
     const userver::formats::json::Value& request_json,
@@ -39,9 +31,9 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   const auto& comment_body = comment_json.body;
   const auto& slug = request.GetPathArg("slug");
 
-  const auto res_find_article = pg_cluster_->Execute(
-      userver::storages::postgres::ClusterHostType::kMaster,
-      sql::kFindIdArticleBySlug.data(), slug);
+  const auto res_find_article =
+      GetPg().Execute(userver::storages::postgres::ClusterHostType::kMaster,
+                      sql::kFindIdArticleBySlug.data(), slug);
 
   if (res_find_article.IsEmpty()) {
     auto& response = request.GetHttpResponse();
@@ -51,7 +43,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
 
   const auto article_id = res_find_article.AsSingleRow<std::string>();
 
-  const auto res_ins_new_comment = pg_cluster_->Execute(
+  const auto res_ins_new_comment = GetPg().Execute(
       userver::storages::postgres::ClusterHostType::kMaster,
       sql::kAddComment.data(), comment_body, user_id, article_id);
 

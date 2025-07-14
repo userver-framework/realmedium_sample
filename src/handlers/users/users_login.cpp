@@ -6,8 +6,8 @@
 #include <userver/storages/postgres/cluster.hpp>
 #include <userver/storages/postgres/component.hpp>
 
-#include "handlers/common.hpp"
 #include "db/sql.hpp"
+#include "handlers/common.hpp"
 #include "models/user.hpp"
 #include "utils/errors.hpp"
 #include "validators/validators.hpp"
@@ -37,9 +37,9 @@ class LoginUser final : public Common {
       return err.GetDetails();
     }
 
-    auto salt = pg_cluster_->Execute(
-        userver::storages::postgres::ClusterHostType::kMaster,
-        sql::kGetSaltByEmail.data(), user_login.email);
+    auto salt =
+        GetPg().Execute(userver::storages::postgres::ClusterHostType::kMaster,
+                        sql::kGetSaltByEmail.data(), user_login.email);
     if (salt.IsEmpty()) {
       auto& response = request.GetHttpResponse();
       response.SetStatus(userver::server::http::HttpStatus::kNotFound);
@@ -48,10 +48,10 @@ class LoginUser final : public Common {
     auto password_hash = userver::crypto::hash::Sha256(
         user_login.password.value() + salt.AsSingleRow<std::string>());
 
-    auto userResult = pg_cluster_->Execute(
-        userver::storages::postgres::ClusterHostType::kMaster,
-        sql::kSelectUserByEmailAndPassword.data(), user_login.email,
-        password_hash);
+    auto userResult =
+        GetPg().Execute(userver::storages::postgres::ClusterHostType::kMaster,
+                        sql::kSelectUserByEmailAndPassword.data(),
+                        user_login.email, password_hash);
 
     if (userResult.IsEmpty()) {
       auto& response = request.GetHttpResponse();

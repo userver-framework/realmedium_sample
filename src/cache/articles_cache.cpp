@@ -43,7 +43,10 @@ ArticlesCacheContainer::getRecent(
   std::vector<ArticlePtr> articles;
   int offset = 0;
   for (const auto& it : recentArticles_) {
-    if (filter.limit && articles.size() >= userver::utils::numeric_cast<std::size_t>(filter.limit)) break;
+    if (filter.limit &&
+        articles.size() >=
+            userver::utils::numeric_cast<std::size_t>(filter.limit))
+      break;
 
     const auto& tags = it.second->tags;
     if (filter.tag && it.second->tags.find(filter.tag.value()) == tags.end())
@@ -79,7 +82,10 @@ std::vector<ArticlesCacheContainer::ArticlePtr> ArticlesCacheContainer::getFeed(
   ;
   int offset = 0;
   for (const auto& it : followedArticlesOrdered) {
-    if (filter.limit && articles.size() >= userver::utils::numeric_cast<std::size_t>(filter.limit)) break;
+    if (filter.limit &&
+        articles.size() >=
+            userver::utils::numeric_cast<std::size_t>(filter.limit))
+      break;
     if (filter.offset && offset < filter.offset) {
       ++offset;
       continue;

@@ -11,7 +11,7 @@ namespace real_medium::handlers::articles::get {
 
 userver::formats::json::Value Handler::HandleRequestJsonThrow(
     const userver::server::http::HttpRequest& request,
-    const userver::formats::json::Value& request_json,
+    const userver::formats::json::Value& /*request_json*/,
     userver::server::request::RequestContext& context) const {
   handlers::ArticleFilterDTO filter;
 
@@ -24,7 +24,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   }
 
   auto user_id = context.GetData<std::optional<std::string>>("id");
-  auto data = cache_.Get();
+  auto data = GetArticlesCache().Get();
   auto recentArticles = data->getRecent(filter);
   userver::formats::json::ValueBuilder builder;
   builder["articles"] = userver::formats::common::Type::kArray;

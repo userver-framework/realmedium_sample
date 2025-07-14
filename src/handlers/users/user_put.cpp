@@ -34,7 +34,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
         user_change_data.password.value() + salt.value());
   }
 
-  const auto result = pg_cluster_->Execute(
+  const auto result = GetPg().Execute(
       userver::storages::postgres::ClusterHostType::kMaster,
       sql::kUpdateUser.data(), user_id, user_change_data.username,
       user_change_data.email, user_change_data.bio, user_change_data.image,

@@ -6,7 +6,7 @@
 
 namespace real_medium::handlers::users::post {
 
-class RegisterUser final: public Common {
+class RegisterUser final : public Common {
  public:
   static constexpr std::string_view kName = "handler-register-user";
   using Common::Common;

@@ -65,7 +65,8 @@ namespace userver::storages::postgres::io {
 
 template <>
 struct CppToUserPg<real_medium::models::TaggedArticleWithProfile> {
-  static constexpr DBTypeName postgres_name{"real_medium.tagged_article_with_author_profile"};
+  static constexpr DBTypeName postgres_name{
+      "real_medium.tagged_article_with_author_profile"};
 };
 
 template <>

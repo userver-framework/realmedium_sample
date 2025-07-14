@@ -13,9 +13,9 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   auto& slug = request.GetPathArg("slug");
 
   auto transaction =
-      pg_cluster_->Begin("unfavorite_article_transaction",
-                         userver::storages::postgres::ClusterHostType::kMaster,
-                         userver::storages::postgres::Transaction::RW);
+      GetPg().Begin("unfavorite_article_transaction",
+                    userver::storages::postgres::ClusterHostType::kMaster,
+                    userver::storages::postgres::Transaction::RW);
 
   auto res =
       transaction.Execute(sql::kDeleteFavoritePair.data(), user_id, slug);
@@ -27,7 +27,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     transaction.Commit();
   }
 
-  const auto get_article_res = pg_cluster_->Execute(
+  const auto get_article_res = GetPg().Execute(
       userver::storages::postgres::ClusterHostType::kSlave,
       real_medium::sql::kGetArticleWithAuthorProfileBySlug.data(), slug,
       user_id);

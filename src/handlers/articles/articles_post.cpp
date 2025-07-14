@@ -34,7 +34,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     const auto slug =
         real_medium::utils::slug::Slugify(createArticleRequest.title.value());
 
-    const auto res = pg_cluster_->Execute(
+    const auto res = GetPg().Execute(
         userver::storages::postgres::ClusterHostType::kMaster,
         real_medium::sql::kCreateArticle.data(), createArticleRequest.title,
         slug, createArticleRequest.body, createArticleRequest.description,
@@ -51,7 +51,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     throw;
   }
 
-  const auto res = pg_cluster_->Execute(
+  const auto res = GetPg().Execute(
       userver::storages::postgres::ClusterHostType::kMaster,
       real_medium::sql::kGetArticleWithAuthorProfile.data(), articleId, userId);
 

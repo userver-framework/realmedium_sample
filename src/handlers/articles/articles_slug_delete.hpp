@@ -19,8 +19,7 @@ class Handler final : public Common {
   userver::formats::json::Value HandleRequestJsonThrow(
       const userver::server::http::HttpRequest& request,
       const userver::formats::json::Value&,
-      userver::server::request::RequestContext& request_context)
-      const override;
+      userver::server::request::RequestContext& request_context) const override;
 };
 
 }  // namespace real_medium::handlers::articles_slug::del

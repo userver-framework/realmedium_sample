@@ -33,7 +33,7 @@ userver::formats::json::Value RegisterUser::
     try {
         auto query_result = GetPg().Execute(
             userver::storages::postgres::ClusterHostType::kMaster,
-            sql::kInsertUser.data(),
+            sql::kInsertUser.c_str(),
             user_register.username,
             user_register.email,
             user_register.bio,

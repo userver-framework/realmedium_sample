@@ -15,36 +15,36 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     userver::server::request::RequestContext& context
 ) const {
     auto slug = request.GetPathArg("slug");
-    handlers::UpdateArticleRequest updateRequest = request_json["article"].As<handlers::UpdateArticleRequest>();
+    auto update_request = request_json["article"].As<handlers::UpdateArticleRequest>();
     try {
-        validator::validate(updateRequest);
+        validator::validate(update_request);
     } catch (const real_medium::utils::error::ValidationException& ex) {
         request.SetResponseStatus(userver::server::http::HttpStatus::kUnprocessableEntity);
         return ex.GetDetails();
     }
-    auto userId = context.GetData<std::optional<std::string>>("id");
+    auto user_id = context.GetData<std::optional<std::string>>("id");
 
-    std::string articleId;
+    std::string article_id;
     try {
-        const auto newSlug =
-            updateRequest.title
-                ? std::make_optional<std::string>(real_medium::utils::slug::Slugify(*updateRequest.title))
+        const auto new_slug =
+            update_request.title
+                ? std::make_optional<std::string>(real_medium::utils::slug::Slugify(*update_request.title))
                 : std::nullopt;
         const auto res = GetPg().Execute(
             userver::storages::postgres::ClusterHostType::kMaster,
-            real_medium::sql::kUpdateArticleBySlug.data(),
+            real_medium::sql::kUpdateArticleBySlug.c_str(),
             slug,
-            userId,
-            updateRequest.title,
-            newSlug,
-            updateRequest.description,
-            updateRequest.body
+            user_id,
+            update_request.title,
+            new_slug,
+            update_request.description,
+            update_request.body
         );
         if (res.IsEmpty()) {
             request.SetResponseStatus(userver::server::http::HttpStatus::kNotFound);
             return {};
         }
-        articleId = res.AsSingleRow<std::string>();
+        article_id = res.AsSingleRow<std::string>();
     } catch (const userver::storages::postgres::UniqueViolation& ex) {
         const auto constraint = ex.GetServerMessage().GetConstraint();
         if (constraint == "uniq_slug") {
@@ -55,9 +55,9 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     }
     const auto res = GetPg().Execute(
         userver::storages::postgres::ClusterHostType::kMaster,
-        real_medium::sql::kGetArticleWithAuthorProfile.data(),
-        articleId,
-        userId
+        real_medium::sql::kGetArticleWithAuthorProfile.c_str(),
+        article_id,
+        user_id
     );
 
     userver::formats::json::ValueBuilder builder;

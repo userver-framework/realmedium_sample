@@ -13,7 +13,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     auto user_id = context.GetData<std::optional<std::string>>("id");
 
     const auto result =
-        GetPg().Execute(userver::storages::postgres::ClusterHostType::kMaster, sql::kFindUserById.data(), user_id);
+        GetPg().Execute(userver::storages::postgres::ClusterHostType::kMaster, sql::kFindUserById.c_str(), user_id);
 
     if (result.IsEmpty()) {
         auto& response = request.GetHttpResponse();

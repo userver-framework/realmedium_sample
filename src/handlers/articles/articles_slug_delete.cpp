@@ -12,9 +12,9 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     userver::server::request::RequestContext& context
 ) const {
     const auto& slug = request.GetPathArg("slug");
-    const auto userId = context.GetData<std::optional<std::string>>("id");
+    const auto user_id = context.GetData<std::optional<std::string>>("id");
     auto res = GetPg().Execute(
-        userver::storages::postgres::ClusterHostType::kMaster, real_medium::sql::kGetArticleIdBySlug.data(), slug
+        userver::storages::postgres::ClusterHostType::kMaster, real_medium::sql::kGetArticleIdBySlug.c_str(), slug
     );
     if (res.IsEmpty()) {
         request.SetResponseStatus(userver::server::http::HttpStatus::kNotFound);
@@ -22,9 +22,9 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     }
     res = GetPg().Execute(
         userver::storages::postgres::ClusterHostType::kMaster,
-        real_medium::sql::kDeleteArticleBySlug.data(),
+        real_medium::sql::kDeleteArticleBySlug.c_str(),
         slug,
-        userId
+        user_id
     );
 
     if (res.IsEmpty()) {

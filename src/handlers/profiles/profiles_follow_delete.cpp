@@ -30,7 +30,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     }
 
     const auto res_find_id_username = GetPg().Execute(
-        userver::storages::postgres::ClusterHostType::kSlave, sql::kFindUserIDByUsername.data(), username
+        userver::storages::postgres::ClusterHostType::kSlave, sql::kFindUserIDByUsername.c_str(), username
     );
     if (res_find_id_username.IsEmpty()) {
         auto& response = request.GetHttpResponse();
@@ -46,7 +46,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     }
 
     const auto res_unfollowing = GetPg().Execute(
-        userver::storages::postgres::ClusterHostType::kSlave, sql::KUnFollowingUser.data(), username_id, user_id
+        userver::storages::postgres::ClusterHostType::kSlave, sql::KUnFollowingUser.c_str(), username_id, user_id
     );
 
     const auto profile = res_unfollowing.AsSingleRow<handlers::Profile>(userver::storages::postgres::kRowTag);

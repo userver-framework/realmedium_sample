@@ -5,7 +5,7 @@ namespace real_medium::utils::jwt {
 using namespace ::jwt::params;
 
 std::string GenerateJWT(std::string_view id) {
-    ::jwt::jwt_object obj{algorithm("HS256"), secret("secret"), payload({{"id", id.data()}})};
+    ::jwt::jwt_object obj{algorithm("HS256"), secret("secret"), payload({{"id", id}})};
     return obj.signature();
 }
 

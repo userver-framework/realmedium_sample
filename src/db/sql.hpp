@@ -1,21 +1,21 @@
 #pragma once
 
-#include <string_view>
+#include <userver/utils/zstring_view.hpp>
 
 namespace real_medium::sql {
 
-inline constexpr std::string_view kInsertUser = R"~(
+inline constexpr userver::utils::zstring_view kInsertUser = R"~(
 INSERT INTO real_medium.users(username, email, bio, image, password_hash, salt)
 VALUES($1, $2, $3, $4, $5, $6)
 RETURNING *
 )~";
 
-inline constexpr std::string_view kSelectUserByEmailAndPassword = R"~(
+inline constexpr userver::utils::zstring_view kSelectUserByEmailAndPassword = R"~(
 SELECT * FROM real_medium.users
 WHERE email = $1 AND password_hash = $2
 )~";
 
-inline constexpr std::string_view kUpdateUser = R"~(
+inline constexpr userver::utils::zstring_view kUpdateUser = R"~(
 UPDATE real_medium.users SET
   username = COALESCE($2, username),
   email = COALESCE($3, email),
@@ -27,16 +27,16 @@ WHERE user_id = $1
 RETURNING *
 )~";
 
-inline constexpr std::string_view kFindUserById = R"~(
+inline constexpr userver::utils::zstring_view kFindUserById = R"~(
 SELECT * FROM real_medium.users WHERE user_id = $1
 )~";
 
-inline constexpr std::string_view kFindUserIDByUsername = R"~(
+inline constexpr userver::utils::zstring_view kFindUserIDByUsername = R"~(
 SELECT user_id FROM real_medium.users WHERE username = $1
 )~";
 
 // Comments
-inline constexpr std::string_view kFindCommentByIdAndSlug = R"~(
+inline constexpr userver::utils::zstring_view kFindCommentByIdAndSlug = R"~(
 WITH article AS (
   SELECT article_id FROM real_medium.articles WHERE slug = $2
 )
@@ -45,7 +45,7 @@ JOIN article ON article.article_id = real_medium.comments.article_id
 WHERE comment_id = $1
 )~";
 
-inline constexpr std::string_view kFindCommentsByArticleId = R"~(
+inline constexpr userver::utils::zstring_view kFindCommentsByArticleId = R"~(
 WITH comments AS (
   SELECT * FROM real_medium.comments WHERE article_id = $1
 )
@@ -66,12 +66,12 @@ SELECT
 FROM comments
 )~";
 
-inline constexpr std::string_view kDeleteCommentById = R"~(
+inline constexpr userver::utils::zstring_view kDeleteCommentById = R"~(
 DELETE FROM real_medium.comments WHERE comment_id = $1 AND user_id = $2
 RETURNING *
 )~";
 
-inline constexpr std::string_view kAddComment = R"~(
+inline constexpr userver::utils::zstring_view kAddComment = R"~(
 WITH comment AS (
     INSERT INTO real_medium.comments(body, user_id, article_id)
     VALUES ($1, $2, $3)
@@ -91,16 +91,16 @@ SELECT
 FROM comment
 )~";
 
-inline constexpr std::string_view kFindIdArticleBySlug = R"~(
+inline constexpr userver::utils::zstring_view kFindIdArticleBySlug = R"~(
 SELECT article_id FROM real_medium.articles WHERE slug = $1
 )~";
 
-inline constexpr std::string_view kIsProfileFollowing = R"~(
+inline constexpr userver::utils::zstring_view kIsProfileFollowing = R"~(
 RETURN EXISTS (SELECT 1 FROM real_medium.followers WHERE follower_user_id = $1 AND followed_user_id = $2);
 )~";
 
 // TODO: reuse common kIsProfileFollowing
-inline constexpr std::string_view kGetProfileByUsername = R"~(
+inline constexpr userver::utils::zstring_view kGetProfileByUsername = R"~(
 WITH profile AS (
   SELECT * FROM real_medium.users WHERE username = $1
 )
@@ -112,11 +112,11 @@ SELECT profile.username, profile.bio, profile.image,
 FROM profile
 )~";
 
-inline constexpr std::string_view kGetSaltByEmail = R"~(
+inline constexpr userver::utils::zstring_view kGetSaltByEmail = R"~(
 SELECT salt FROM real_medium.users WHERE email = $1
 )~";
 
-inline constexpr std::string_view KFollowingUser = R"~(
+inline constexpr userver::utils::zstring_view KFollowingUser = R"~(
 WITH profile AS (
   SELECT * FROM real_medium.users WHERE user_id = $1
 ), following AS (
@@ -132,7 +132,7 @@ SELECT
 FROM profile
 )~";
 
-inline constexpr std::string_view KUnFollowingUser = R"~(
+inline constexpr userver::utils::zstring_view KUnFollowingUser = R"~(
 WITH profile AS (
   SELECT * FROM real_medium.users WHERE user_id = $1
 ), following AS (
@@ -147,19 +147,19 @@ SELECT
 FROM profile
 )~";
 
-inline constexpr std::string_view kCreateArticle{R"~(
+inline constexpr userver::utils::zstring_view kCreateArticle{R"~(
 SELECT real_medium.create_article($1, $2, $3, $4, $5, $6)
 )~"};
 
-inline constexpr std::string_view kGetArticleWithAuthorProfile{R"~(
+inline constexpr userver::utils::zstring_view kGetArticleWithAuthorProfile{R"~(
 SELECT real_medium.get_article_with_author_profile($1, $2)
 )~"};
 
-inline constexpr std::string_view kGetArticleWithAuthorProfileBySlug{R"~(
+inline constexpr userver::utils::zstring_view kGetArticleWithAuthorProfileBySlug{R"~(
 SELECT real_medium.get_article_with_author_profile_by_slug($1, $2)
 )~"};
 
-inline constexpr std::string_view kInsertFavoritePair = R"~(
+inline constexpr userver::utils::zstring_view kInsertFavoritePair = R"~(
 WITH tmp(article_id, user_id) AS (
     SELECT article_id, $1 FROM real_medium.articles WHERE slug=$2
 )
@@ -168,13 +168,13 @@ ON CONFLICT DO NOTHING
 RETURNING article_id
 )~";
 
-inline constexpr std::string_view kIncrementFavoritesCount = R"~(
+inline constexpr userver::utils::zstring_view kIncrementFavoritesCount = R"~(
 UPDATE real_medium.articles
 SET favorites_count=favorites_count + 1
 WHERE article_id=$1
 )~";
 
-inline constexpr std::string_view kDeleteFavoritePair = R"~(
+inline constexpr userver::utils::zstring_view kDeleteFavoritePair = R"~(
 WITH tmp(article_id, user_id) AS (
     SELECT article_id, $1 FROM real_medium.articles WHERE slug=$2
 )
@@ -183,33 +183,33 @@ WHERE (article_id, user_id) IN (SELECT article_id, user_id FROM tmp)
 RETURNING article_id
 )~";
 
-inline constexpr std::string_view kDecrementFavoritesCount = R"~(
+inline constexpr userver::utils::zstring_view kDecrementFavoritesCount = R"~(
 UPDATE real_medium.articles
 SET favorites_count=favorites_count - 1
 WHERE article_id=$1
 )~";
 
-inline constexpr std::string_view kFindArticlesByFollowedUsers = R"~(
+inline constexpr userver::utils::zstring_view kFindArticlesByFollowedUsers = R"~(
 SELECT real_medium.get_feed_articles($1, $2, $3)
 )~";
 
-inline constexpr std::string_view kGetArticleIdBySlug{R"~(
+inline constexpr userver::utils::zstring_view kGetArticleIdBySlug{R"~(
 SELECT real_medium.get_article_id_by_slug($1)
 )~"};
 
-inline constexpr std::string_view kUpdateArticleBySlug{R"~(
+inline constexpr userver::utils::zstring_view kUpdateArticleBySlug{R"~(
 SELECT real_medium.update_article_by_slug($1, $2, $3, $4, $5, $6)
 )~"};
 
-inline constexpr std::string_view kDeleteArticleBySlug{R"~(
+inline constexpr userver::utils::zstring_view kDeleteArticleBySlug{R"~(
 SELECT real_medium.delete_article_by_slug($1, $2)
 )~"};
 
-inline constexpr std::string_view kFindArticlesByFilters{R"~(
+inline constexpr userver::utils::zstring_view kFindArticlesByFilters{R"~(
 SELECT real_medium.get_articles_by_filters($1, $2, $3, $4, $5, $6)
 )~"};
 
-inline constexpr std::string_view kSelectFullArticleInfo = {R"~(
+inline constexpr userver::utils::zstring_view kSelectFullArticleInfo = {R"~(
 SELECT a.article_id AS articleId,
        a.title,
        a.slug,
@@ -245,7 +245,7 @@ FROM real_medium.articles a
 JOIN real_medium.users u ON a.user_id = u.user_id
 )~"};
 
-inline constexpr std::string_view kSelectCachedComments = {R"~(
+inline constexpr userver::utils::zstring_view kSelectCachedComments = {R"~(
 SELECT c.comment_id,
        c.created_at AS createdAt,
        c.updated_at AS updatedAt,

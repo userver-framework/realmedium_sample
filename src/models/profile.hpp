@@ -9,7 +9,7 @@ namespace userver::storages::postgres::io {
 
 template <>
 struct CppToUserPg<real_medium::handlers::Profile> {
-  static constexpr DBTypeName postgres_name{"real_medium.profile"};
+    static constexpr DBTypeName postgres_name{"real_medium.profile"};
 };
 
 }  // namespace userver::storages::postgres::io

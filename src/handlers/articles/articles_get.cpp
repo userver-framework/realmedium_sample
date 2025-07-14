@@ -12,26 +12,26 @@ namespace real_medium::handlers::articles::get {
 userver::formats::json::Value Handler::HandleRequestJsonThrow(
     const userver::server::http::HttpRequest& request,
     const userver::formats::json::Value& /*request_json*/,
-    userver::server::request::RequestContext& context) const {
-  handlers::ArticleFilterDTO filter;
+    userver::server::request::RequestContext& context
+) const {
+    handlers::ArticleFilterDTO filter;
 
-  try {
-    filter = dto::Parse<handlers::ArticleFilterDTO>(request);
-  } catch (std::bad_cast& ex) {
-    auto& response = request.GetHttpResponse();
-    response.SetStatus(userver::server::http::HttpStatus::kUnprocessableEntity);
-    return utils::error::MakeError("filters", "invalid filters entered");
-  }
+    try {
+        filter = dto::Parse<handlers::ArticleFilterDTO>(request);
+    } catch (std::bad_cast& ex) {
+        auto& response = request.GetHttpResponse();
+        response.SetStatus(userver::server::http::HttpStatus::kUnprocessableEntity);
+        return utils::error::MakeError("filters", "invalid filters entered");
+    }
 
-  auto user_id = context.GetData<std::optional<std::string>>("id");
-  auto data = GetArticlesCache().Get();
-  auto recentArticles = data->getRecent(filter);
-  userver::formats::json::ValueBuilder builder;
-  builder["articles"] = userver::formats::common::Type::kArray;
-  for (auto& article : recentArticles)
-    builder["articles"].PushBack(dto::Article::Parse(*article, user_id));
-  builder["articlesCount"] = recentArticles.size();
-  return builder.ExtractValue();
+    auto user_id = context.GetData<std::optional<std::string>>("id");
+    auto data = GetArticlesCache().Get();
+    auto recentArticles = data->getRecent(filter);
+    userver::formats::json::ValueBuilder builder;
+    builder["articles"] = userver::formats::common::Type::kArray;
+    for (auto& article : recentArticles) builder["articles"].PushBack(dto::Article::Parse(*article, user_id));
+    builder["articlesCount"] = recentArticles.size();
+    return builder.ExtractValue();
 }
 
 }  // namespace real_medium::handlers::articles::get

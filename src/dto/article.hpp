@@ -10,22 +10,20 @@
 
 namespace real_medium::dto {
 struct Article final {
-  static Article Parse(const models::TaggedArticleWithProfile& model);
-  static Article Parse(const models::FullArticleInfo& info,
-                       std::optional<std::string> authUserId);
-  std::string slug;
-  std::string title;
-  std::string body;
-  std::string description;
-  std::optional<std::vector<std::string>> tags;
-  userver::storages::postgres::TimePointTz createdAt;
-  userver::storages::postgres::TimePointTz updatedAt;
-  std::int64_t favoritesCount{};
-  bool isFavorited{false};
-  handlers::Profile profile;
+    static Article Parse(const models::TaggedArticleWithProfile& model);
+    static Article Parse(const models::FullArticleInfo& info, std::optional<std::string> authUserId);
+    std::string slug;
+    std::string title;
+    std::string body;
+    std::string description;
+    std::optional<std::vector<std::string>> tags;
+    userver::storages::postgres::TimePointTz createdAt;
+    userver::storages::postgres::TimePointTz updatedAt;
+    std::int64_t favoritesCount{};
+    bool isFavorited{false};
+    handlers::Profile profile;
 };
 
-userver::formats::json::Value Serialize(
-    const Article& data,
-    userver::formats::serialize::To<userver::formats::json::Value>);
+userver::formats::json::Value
+Serialize(const Article& data, userver::formats::serialize::To<userver::formats::json::Value>);
 }  // namespace real_medium::dto

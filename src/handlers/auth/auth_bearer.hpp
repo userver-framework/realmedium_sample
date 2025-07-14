@@ -5,18 +5,17 @@
 
 namespace real_medium::auth {
 
-class CheckerFactory final
-    : public userver::server::handlers::auth::AuthCheckerFactoryBase {
- public:
-  static constexpr std::string_view kAuthType = "bearer";
+class CheckerFactory final : public userver::server::handlers::auth::AuthCheckerFactoryBase {
+public:
+    static constexpr std::string_view kAuthType = "bearer";
 
-  explicit CheckerFactory(const userver::components::ComponentContext& context);
+    explicit CheckerFactory(const userver::components::ComponentContext& context);
 
-  userver::server::handlers::auth::AuthCheckerBasePtr MakeAuthChecker(
-      const userver::server::handlers::auth::HandlerAuthConfig&) const override;
+    userver::server::handlers::auth::AuthCheckerBasePtr
+    MakeAuthChecker(const userver::server::handlers::auth::HandlerAuthConfig&) const override;
 
- private:
-  userver::storages::postgres::ClusterPtr pg_cluster_;
+private:
+    userver::storages::postgres::ClusterPtr pg_cluster_;
 };
 
 }  // namespace real_medium::auth

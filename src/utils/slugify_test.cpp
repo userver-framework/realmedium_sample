@@ -14,28 +14,20 @@ TEST(SlugifyTest, TestEnglish3) { EXPECT_EQ(Slugify("ab%c"), "abc"); }
 TEST(SlugifyTest, TestEnglish4) { EXPECT_EQ(Slugify("ab  c"), "ab-c"); }
 
 TEST(SlugifyTest, TestEnglish5) {
-  EXPECT_EQ(Slugify("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz012345"
-                    "6789-._~:/?#[]@!$&'()*+,;="),
-            "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz0123456789");
+    EXPECT_EQ(
+        Slugify("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz012345"
+                "6789-._~:/?#[]@!$&'()*+,;="),
+        "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz0123456789"
+    );
 }
 
-TEST(SlugifyTest, TestRussian) {
-  EXPECT_EQ(Slugify("Заголовок статьи"), "zagolovok-stat'i");
-}
+TEST(SlugifyTest, TestRussian) { EXPECT_EQ(Slugify("Заголовок статьи"), "zagolovok-stat'i"); }
 
-TEST(SlugifyTest, TestGerman) {
-  EXPECT_EQ(Slugify("Artikelüberschrift"), "artikeluberschrift");
-}
+TEST(SlugifyTest, TestGerman) { EXPECT_EQ(Slugify("Artikelüberschrift"), "artikeluberschrift"); }
 
-TEST(SlugifyTest, TestFrench) {
-  EXPECT_EQ(Slugify("le titre de l'article"), "le-titre-de-larticle");
-}
+TEST(SlugifyTest, TestFrench) { EXPECT_EQ(Slugify("le titre de l'article"), "le-titre-de-larticle"); }
 
-TEST(SlugifyTest, TestSpanish) {
-  EXPECT_EQ(Slugify("título del artículo"), "titulo-del-articulo");
-}
+TEST(SlugifyTest, TestSpanish) { EXPECT_EQ(Slugify("título del artículo"), "titulo-del-articulo"); }
 
-TEST(SlugifyTest, TestChineese) {
-  EXPECT_EQ(Slugify("文章標題"), "wen-zhang-biao-ti");
-}
+TEST(SlugifyTest, TestChineese) { EXPECT_EQ(Slugify("文章標題"), "wen-zhang-biao-ti"); }
 }  // namespace real_medium::utils::slug

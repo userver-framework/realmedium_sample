@@ -26,7 +26,6 @@ public:
     HandleRequestJsonThrow(const userver::server::http::HttpRequest& request, const userver::formats::json::Value& request_json, userver::server::request::RequestContext&)
         const override {
         auto&& user_login = request_json["user"].As<UserLoginDTO>();
-        ;
 
         try {
             validator::validate(user_login);
@@ -36,7 +35,7 @@ public:
         }
 
         auto salt = GetPg().Execute(
-            userver::storages::postgres::ClusterHostType::kMaster, sql::kGetSaltByEmail.data(), user_login.email
+            userver::storages::postgres::ClusterHostType::kMaster, sql::kGetSaltByEmail.c_str(), user_login.email
         );
         if (salt.IsEmpty()) {
             auto& response = request.GetHttpResponse();
@@ -46,20 +45,20 @@ public:
         auto password_hash =
             userver::crypto::hash::Sha256(user_login.password.value() + salt.AsSingleRow<std::string>());
 
-        auto userResult = GetPg().Execute(
+        auto user_result = GetPg().Execute(
             userver::storages::postgres::ClusterHostType::kMaster,
-            sql::kSelectUserByEmailAndPassword.data(),
+            sql::kSelectUserByEmailAndPassword.c_str(),
             user_login.email,
             password_hash
         );
 
-        if (userResult.IsEmpty()) {
+        if (user_result.IsEmpty()) {
             auto& response = request.GetHttpResponse();
             response.SetStatus(userver::server::http::HttpStatus::kNotFound);
             return {};
         }
 
-        auto user = userResult.AsSingleRow<models::User>(userver::storages::postgres::kRowTag);
+        auto user = user_result.AsSingleRow<models::User>(userver::storages::postgres::kRowTag);
 
         userver::formats::json::ValueBuilder response;
         response["user"] = user;

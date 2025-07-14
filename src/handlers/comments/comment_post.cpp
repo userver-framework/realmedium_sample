@@ -31,7 +31,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     const auto& slug = request.GetPathArg("slug");
 
     const auto res_find_article =
-        GetPg().Execute(userver::storages::postgres::ClusterHostType::kMaster, sql::kFindIdArticleBySlug.data(), slug);
+        GetPg().Execute(userver::storages::postgres::ClusterHostType::kMaster, sql::kFindIdArticleBySlug.c_str(), slug);
 
     if (res_find_article.IsEmpty()) {
         auto& response = request.GetHttpResponse();
@@ -43,7 +43,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
 
     const auto res_ins_new_comment = GetPg().Execute(
         userver::storages::postgres::ClusterHostType::kMaster,
-        sql::kAddComment.data(),
+        sql::kAddComment.c_str(),
         comment_body,
         user_id,
         article_id

@@ -1,14 +1,18 @@
 #pragma once
+
 #include <docs/api/api.hpp>
 #include <memory>
 #include <unordered_map>
+
 #include <userver/cache/base_postgres_cache.hpp>
 #include <userver/storages/postgres/io/chrono.hpp>
+
 #include "db/sql.hpp"
 #include "dto/filter.hpp"
 #include "models/article.hpp"
 
 namespace real_medium::cache::articles_cache {
+
 class ArticlesCacheContainer {
     using Timepoint = userver::storages::postgres::TimePointTz;
     using Slug = std::string;
@@ -40,10 +44,10 @@ private:
     };
 
     using RecentArticlesMap = std::map<TimepointedArticle /*created_at*/, ArticlePtr, std::greater<TimepointedArticle>>;
-    std::unordered_map<Key, ArticlePtr> articleByKey_;
-    std::unordered_map<Slug, ArticlePtr> articleBySlug_;
-    std::unordered_map<UserId /*follower*/, std::unordered_map<Key, ArticlePtr>> articlesByFollower_;
-    RecentArticlesMap recentArticles_;
+    std::unordered_map<Key, ArticlePtr> article_by_key_;
+    std::unordered_map<Slug, ArticlePtr> article_by_slug_;
+    std::unordered_map<UserId /*follower*/, std::unordered_map<Key, ArticlePtr>> articles_by_follower_;
+    RecentArticlesMap recent_articles_;
 };
 
 struct ArticlesCachePolicy {
@@ -55,5 +59,7 @@ struct ArticlesCachePolicy {
     static constexpr auto kUpdatedField = "updated_at";
     using UpdatedFieldType = userver::storages::postgres::TimePointTz;
 };
+
 using ArticlesCache = ::userver::components::PostgreCache<ArticlesCachePolicy>;
+
 }  // namespace real_medium::cache::articles_cache

@@ -34,7 +34,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
 
     const auto result = GetPg().Execute(
         userver::storages::postgres::ClusterHostType::kMaster,
-        sql::kUpdateUser.data(),
+        sql::kUpdateUser.c_str(),
         user_id,
         user_change_data.username,
         user_change_data.email,

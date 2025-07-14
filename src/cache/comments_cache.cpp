@@ -9,23 +9,23 @@
 namespace real_medium::cache::comments_cache {
 
 userver::storages::postgres::Query CommentCachePolicy::kQuery =
-    userver::storages::postgres::Query(real_medium::sql::kSelectCachedComments.data());
+    userver::storages::postgres::Query(real_medium::sql::kSelectCachedComments.c_str());
 
 void CommentsCacheContainer::insert_or_assign(
-    real_medium::cache::comments_cache::CommentsCacheContainer::Key&& commentId,
+    real_medium::cache::comments_cache::CommentsCacheContainer::Key&& comment_id,
     real_medium::cache::comments_cache::CommentsCacheContainer::Comment&& comment
 ) {
-    auto commentPtr = std::make_shared<const Comment>(std::move(comment));
-    if (comment_to_key_.count(commentId)) {
-        auto& oldSlug = comment_to_key_[commentId]->slug;
-        if (oldSlug != commentPtr->slug) {
-            auto& comments = comments_to_slug_[oldSlug];
-            comments_to_slug_[commentPtr->slug] = comments;
-            comments_to_slug_.erase(oldSlug);
+    auto comment_ptr = std::make_shared<const Comment>(std::move(comment));
+    if (comment_to_key_.count(comment_id)) {
+        auto& old_slug = comment_to_key_[comment_id]->slug;
+        if (old_slug != comment_ptr->slug) {
+            auto& comments = comments_to_slug_[old_slug];
+            comments_to_slug_[comment_ptr->slug] = comments;
+            comments_to_slug_.erase(old_slug);
         }
     }
-    comment_to_key_.insert_or_assign(commentId, commentPtr);
-    comments_to_slug_[commentPtr->slug].insert_or_assign(commentId, commentPtr);
+    comment_to_key_.insert_or_assign(comment_id, comment_ptr);
+    comments_to_slug_[comment_ptr->slug].insert_or_assign(comment_id, comment_ptr);
 };
 
 size_t CommentsCacheContainer::size() const { return comment_to_key_.size(); }

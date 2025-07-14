@@ -48,7 +48,7 @@ AuthCheckerBearer::AuthCheckResult AuthCheckerBearer::CheckAuth(
     }
 
     const auto bearer_sep_pos = auth_value.find(' ');
-    if (bearer_sep_pos == std::string::npos || std::string_view{auth_value.data(), bearer_sep_pos} != "Token") {
+    if (bearer_sep_pos == std::string::npos || std::string_view{auth_value.c_str(), bearer_sep_pos} != "Token") {
         return AuthCheckResult{
             AuthCheckResult::Status::kTokenNotFound,
             {},
@@ -56,7 +56,7 @@ AuthCheckerBearer::AuthCheckResult AuthCheckerBearer::CheckAuth(
             userver::server::handlers::HandlerErrorCode::kUnauthorized
         };
     }
-    std::string_view token{auth_value.data() + bearer_sep_pos + 1};
+    std::string_view token{auth_value.c_str() + bearer_sep_pos + 1};
     jwt::jwt_payload payload;
     try {
         payload = utils::jwt::DecodeJWT(token);
@@ -71,7 +71,7 @@ AuthCheckerBearer::AuthCheckResult AuthCheckerBearer::CheckAuth(
     auto id = payload.get_claim_value<std::string>("id");
 
     const auto res =
-        pg_cluster_->Execute(userver::storages::postgres::ClusterHostType::kSlave, sql::kFindUserById.data(), id);
+        pg_cluster_->Execute(userver::storages::postgres::ClusterHostType::kSlave, sql::kFindUserById.c_str(), id);
     if (res.IsEmpty()) {
         return AuthCheckResult{
             AuthCheckResult::Status::kTokenNotFound,

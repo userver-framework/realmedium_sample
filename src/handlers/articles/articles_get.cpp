@@ -26,11 +26,11 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
 
     auto user_id = context.GetData<std::optional<std::string>>("id");
     auto data = GetArticlesCache().Get();
-    auto recentArticles = data->getRecent(filter);
+    auto recent_articles = data->getRecent(filter);
     userver::formats::json::ValueBuilder builder;
     builder["articles"] = userver::formats::common::Type::kArray;
-    for (auto& article : recentArticles) builder["articles"].PushBack(dto::Article::Parse(*article, user_id));
-    builder["articlesCount"] = recentArticles.size();
+    for (auto& article : recent_articles) builder["articles"].PushBack(dto::Article::Parse(*article, user_id));
+    builder["articlesCount"] = recent_articles.size();
     return builder.ExtractValue();
 }
 

@@ -11,8 +11,8 @@ namespace real_medium::handlers::tags::get {
 userver::formats::json::Value Handler::
     HandleRequestJsonThrow(const userver::server::http::HttpRequest&, const userver::formats::json::Value&, userver::server::request::RequestContext&)
         const {
-    constexpr static auto query = "SELECT tag_name FROM real_medium.tag_list";
-    auto result = GetPg().Execute(userver::storages::postgres::ClusterHostType::kSlave, query);
+    constexpr static auto kQuery = "SELECT tag_name FROM real_medium.tag_list";
+    auto result = GetPg().Execute(userver::storages::postgres::ClusterHostType::kSlave, kQuery);
     auto tags = result.AsSetOf<std::string>();
 
     userver::formats::json::ValueBuilder response;

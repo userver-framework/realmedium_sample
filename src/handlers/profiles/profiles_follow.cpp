@@ -30,9 +30,8 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
         return utils::error::MakeError("username", "It is null.");
     }
 
-    const auto res_find_id_username = GetPg().Execute(
-        userver::storages::postgres::ClusterHostType::kSlave, sql::kFindUserIDByUsername.c_str(), username
-    );
+    const auto res_find_id_username =
+        GetPg().Execute(userver::storages::postgres::ClusterHostType::kSlave, sql::kFindUserIdByUsername, username);
     if (res_find_id_username.IsEmpty()) {
         auto& response = request.GetHttpResponse();
         response.SetStatus(userver::server::http::HttpStatus::kNotFound);
@@ -48,7 +47,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     }
 
     const auto res_following = GetPg().Execute(
-        userver::storages::postgres::ClusterHostType::kSlave, sql::KFollowingUser.c_str(), username_id, user_id
+        userver::storages::postgres::ClusterHostType::kSlave, sql::kFollowingUser, username_id, user_id
     );
 
     const auto profile = res_following.AsSingleRow<handlers::Profile>(userver::storages::postgres::kRowTag);

@@ -4,8 +4,7 @@
 
 namespace real_medium::cache::articles_cache {
 
-userver::storages::postgres::Query ArticlesCachePolicy::kQuery =
-    userver::storages::postgres::Query(real_medium::sql::kSelectFullArticleInfo.c_str());
+userver::storages::postgres::Query ArticlesCachePolicy::kQuery = real_medium::sql::kSelectFullArticleInfo;
 
 void ArticlesCacheContainer::insert_or_assign(Key&& key, Article&& article) {
     auto article_ptr = std::make_shared<const Article>(std::move(article));

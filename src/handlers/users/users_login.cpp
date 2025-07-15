@@ -35,7 +35,7 @@ public:
         }
 
         auto salt = GetPg().Execute(
-            userver::storages::postgres::ClusterHostType::kMaster, sql::kGetSaltByEmail.c_str(), user_login.email
+            userver::storages::postgres::ClusterHostType::kMaster, sql::kGetSaltByEmail, user_login.email
         );
         if (salt.IsEmpty()) {
             auto& response = request.GetHttpResponse();
@@ -47,7 +47,7 @@ public:
 
         auto user_result = GetPg().Execute(
             userver::storages::postgres::ClusterHostType::kMaster,
-            sql::kSelectUserByEmailAndPassword.c_str(),
+            sql::kSelectUserByEmailAndPassword,
             user_login.email,
             password_hash
         );

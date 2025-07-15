@@ -17,7 +17,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     const auto& slug = request.GetPathArg("slug");
 
     const auto result_find_comment = GetPg().Execute(
-        userver::storages::postgres::ClusterHostType::kMaster, sql::kFindCommentByIdAndSlug.c_str(), comment_id, slug
+        userver::storages::postgres::ClusterHostType::kMaster, sql::kFindCommentByIdAndSlug, comment_id, slug
     );
 
     if (result_find_comment.IsEmpty()) {
@@ -27,7 +27,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     }
 
     const auto result_delete_comment = GetPg().Execute(
-        userver::storages::postgres::ClusterHostType::kMaster, sql::kDeleteCommentById.c_str(), comment_id, user_id
+        userver::storages::postgres::ClusterHostType::kMaster, sql::kDeleteCommentById, comment_id, user_id
     );
 
     if (result_delete_comment.IsEmpty()) {

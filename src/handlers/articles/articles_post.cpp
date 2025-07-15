@@ -34,7 +34,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
 
         const auto res = GetPg().Execute(
             userver::storages::postgres::ClusterHostType::kMaster,
-            real_medium::sql::kCreateArticle.c_str(),
+            real_medium::sql::kCreateArticle,
             create_article_request.title,
             slug,
             create_article_request.body,
@@ -55,7 +55,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
 
     const auto res = GetPg().Execute(
         userver::storages::postgres::ClusterHostType::kMaster,
-        real_medium::sql::kGetArticleWithAuthorProfile.c_str(),
+        real_medium::sql::kGetArticleWithAuthorProfile,
         article_id,
         user_id
     );

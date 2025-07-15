@@ -14,17 +14,14 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     const auto& slug = request.GetPathArg("slug");
     const auto user_id = context.GetData<std::optional<std::string>>("id");
     auto res = GetPg().Execute(
-        userver::storages::postgres::ClusterHostType::kMaster, real_medium::sql::kGetArticleIdBySlug.c_str(), slug
+        userver::storages::postgres::ClusterHostType::kMaster, real_medium::sql::kGetArticleIdBySlug, slug
     );
     if (res.IsEmpty()) {
         request.SetResponseStatus(userver::server::http::HttpStatus::kNotFound);
         return {};
     }
     res = GetPg().Execute(
-        userver::storages::postgres::ClusterHostType::kMaster,
-        real_medium::sql::kDeleteArticleBySlug.c_str(),
-        slug,
-        user_id
+        userver::storages::postgres::ClusterHostType::kMaster, real_medium::sql::kDeleteArticleBySlug, slug, user_id
     );
 
     if (res.IsEmpty()) {

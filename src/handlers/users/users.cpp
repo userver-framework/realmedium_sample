@@ -45,7 +45,7 @@ userver::formats::json::Value RegisterUser::
     } catch (const userver::storages::postgres::UniqueViolation& ex) {
         auto& response = request.GetHttpResponse();
         response.SetStatus(userver::server::http::HttpStatus::kUnprocessableEntity);
-        return utils::error::MakeError(ex.GetServerMessage().GetConstraint().value_or(""), ex.GetServerMessage().GetDetail());
+        return utils::error::MakeError(ex.GetServerMessage().GetConstraint().value_or("<unknown>"), ex.GetServerMessage().GetDetail().value_or("<unknown>"));
     }
 
     userver::formats::json::ValueBuilder builder;

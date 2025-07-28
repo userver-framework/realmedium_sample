@@ -47,6 +47,15 @@ userver_target_generate_chaotic(${PROJECT_NAME}-chgen
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC ${PROJECT_NAME}-chgen)
+
+userver_add_sql_library(
+    ${PROJECT_NAME}_sql
+    NAMESPACE real_medium
+    OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}
+    SQL_FILES src/db/*.sql
+)
+target_link_libraries(${PROJECT_NAME}_objs PUBLIC ${PROJECT_NAME}_sql)
+
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC cpp-jwt)
 
 find_package(ICU COMPONENTS uc i18n REQUIRED)

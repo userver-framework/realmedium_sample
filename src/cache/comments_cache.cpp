@@ -8,8 +8,7 @@
 
 namespace real_medium::cache::comments_cache {
 
-userver::storages::postgres::Query CommentCachePolicy::kQuery =
-    userver::storages::postgres::Query(real_medium::sql::kSelectCachedComments.c_str());
+userver::storages::postgres::Query CommentCachePolicy::kQuery = real_medium::sql::kSelectCachedComments;
 
 void CommentsCacheContainer::insert_or_assign(
     real_medium::cache::comments_cache::CommentsCacheContainer::Key&& comment_id,

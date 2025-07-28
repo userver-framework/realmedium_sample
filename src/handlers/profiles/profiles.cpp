@@ -21,7 +21,7 @@ json::Value Handler::HandleRequestJsonThrow(const HttpRequest& request, const js
     const {
     auto user_id = context.GetData<std::optional<std::string>>("id");
     const auto& username = request.GetPathArg("username");
-    auto res = GetPg().Execute(ClusterHostType::kMaster, sql::kGetProfileByUsername.c_str(), username, user_id);
+    auto res = GetPg().Execute(ClusterHostType::kMaster, sql::kGetProfileByUsername, username, user_id);
     if (res.IsEmpty()) {
         auto& response = request.GetHttpResponse();
         response.SetStatus(userver::server::http::HttpStatus::kNotFound);

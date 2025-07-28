@@ -32,7 +32,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
                 : std::nullopt;
         const auto res = GetPg().Execute(
             userver::storages::postgres::ClusterHostType::kMaster,
-            real_medium::sql::kUpdateArticleBySlug.c_str(),
+            real_medium::sql::kUpdateArticleBySlug,
             slug,
             user_id,
             update_request.title,
@@ -55,7 +55,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     }
     const auto res = GetPg().Execute(
         userver::storages::postgres::ClusterHostType::kMaster,
-        real_medium::sql::kGetArticleWithAuthorProfile.c_str(),
+        real_medium::sql::kGetArticleWithAuthorProfile,
         article_id,
         user_id
     );

@@ -19,18 +19,18 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
         userver::storages::postgres::Transaction::RW
     );
 
-    auto res = transaction.Execute(sql::kDeleteFavoritePair.c_str(), user_id, slug);
+    auto res = transaction.Execute(sql::kDeleteFavoritePair, user_id, slug);
 
     if (!res.IsEmpty()) {
         auto article_id = res.AsSingleRow<std::string>();
 
-        transaction.Execute(sql::kDecrementFavoritesCount.c_str(), article_id);
+        transaction.Execute(sql::kDecrementFavoritesCount, article_id);
         transaction.Commit();
     }
 
     const auto get_article_res = GetPg().Execute(
         userver::storages::postgres::ClusterHostType::kSlave,
-        real_medium::sql::kGetArticleWithAuthorProfileBySlug.c_str(),
+        real_medium::sql::kGetArticleWithAuthorProfileBySlug,
         slug,
         user_id
     );

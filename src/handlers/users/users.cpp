@@ -18,7 +18,6 @@ userver::formats::json::Value RegisterUser::
     HandleRequestJsonThrow(const userver::server::http::HttpRequest& request, const userver::formats::json::Value& request_json, userver::server::request::RequestContext&)
         const {
     handlers::UserRegistrationDTO user_register = request_json["user"].As<handlers::UserRegistrationDTO>();
-    ;
 
     try {
         validator::validate(user_register);
@@ -33,7 +32,7 @@ userver::formats::json::Value RegisterUser::
     try {
         auto query_result = GetPg().Execute(
             userver::storages::postgres::ClusterHostType::kMaster,
-            sql::kInsertUser.c_str(),
+            sql::kInsertUser,
             user_register.username,
             user_register.email,
             user_register.bio,

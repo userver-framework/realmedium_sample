@@ -70,8 +70,7 @@ AuthCheckerBearer::AuthCheckResult AuthCheckerBearer::CheckAuth(
     }
     auto id = payload.get_claim_value<std::string>("id");
 
-    const auto res =
-        pg_cluster_->Execute(userver::storages::postgres::ClusterHostType::kSlave, sql::kFindUserById.c_str(), id);
+    const auto res = pg_cluster_->Execute(userver::storages::postgres::ClusterHostType::kSlave, sql::kFindUserById, id);
     if (res.IsEmpty()) {
         return AuthCheckResult{
             AuthCheckResult::Status::kTokenNotFound,

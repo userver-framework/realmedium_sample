@@ -50,12 +50,9 @@ target_link_libraries(${PROJECT_NAME}_objs PUBLIC ${PROJECT_NAME}-chgen)
 
 userver_add_sql_library(
     ${PROJECT_NAME}_sql
-    NAMESPACE
-    real_medium
-    OUTPUT_DIR
-    ${CMAKE_CURRENT_BINARY_DIR}
-    SQL_FILES
-    src/db/*.sql
+    NAMESPACE real_medium
+    OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}
+    SQL_FILES src/db/*.sql
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC ${PROJECT_NAME}_sql)
 

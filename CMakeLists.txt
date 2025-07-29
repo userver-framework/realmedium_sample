@@ -46,6 +46,7 @@ userver_target_generate_chaotic(${PROJECT_NAME}-chgen
     RELATIVE_TO
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
+target_link_libraries(${PROJECT_NAME}-chgen userver::postgresql)
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC ${PROJECT_NAME}-chgen)
 
 userver_add_sql_library(

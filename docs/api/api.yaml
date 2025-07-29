@@ -296,44 +296,46 @@ components:
         body:
           type: string
 
-#    Article:
-#      required:
-#        - profile
-#        - body
-#        - createdAt
-#        - description
-#        - isFavorited
-#        - favoritesCount
-#        - slug
-#        - title
-#        - updatedAt
-#      type: object
-#      properties:
-#        slug:
-#          type: string
-#        title:
-#          type: string
-#        description:
-#          type: string
-#        body:
-#          type: string
-#        tags:
-#          type: array
-#          items:
-#            type: string
-#        createdAt:
-#          type: string
-#          format: date-time
-#        updatedAt:
-#          type: string
-#          format: date-time
-#        isFavorited:
-#          type: boolean
-#        favoritesCount:
-#          type: integer
-#        profile:
-#          $ref: '#/components/schemas/Profile'
-#      additionalProperties: false
+    Article:
+      required:
+        - profile
+        - body
+        - createdAt
+        - description
+        - isFavorited
+        - favoritesCount
+        - slug
+        - title
+        - updatedAt
+      type: object
+      properties:
+        slug:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        body:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          format: date-time
+          x-usrv-cpp-type: userver::storages::postgres::TimePointTz
+        updatedAt:
+          type: string
+          format: date-time
+          x-usrv-cpp-type: userver::storages::postgres::TimePointTz
+        isFavorited:
+          type: boolean
+        favoritesCount:
+          type: integer
+        profile:
+          $ref: '#/components/schemas/Profile'
+      additionalProperties: false
 
     ArticleFilterDTO:
       type: object

@@ -1,1 +1,3 @@
-SELECT real_medium.get_article_id_by_slug($1)
+SELECT article_id
+FROM real_medium.articles
+WHERE slug = $1

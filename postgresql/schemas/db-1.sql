@@ -334,55 +334,6 @@ END;
 $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION real_medium.update_article_by_slug(_old_slug varchar(255), _user_id text, _title varchar(255) = NULL, _new_slug varchar(255) = NULL, _description text = NULL, _body text = NULL)
-        RETURNS SETOF TEXT
-        AS $$
-BEGIN
-        RETURN QUERY UPDATE
-                real_medium.articles
-        SET
-                title = COALESCE(_title, title),
-                slug = COALESCE(_new_slug, slug),
-                description = COALESCE(_description, description),
-                body = COALESCE(_body, body),
-                updated_at = NOW()
-        WHERE
-                slug = _old_slug
-                AND user_id = _user_id
-        RETURNING
-                article_id;
-END;
-$$
-LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION real_medium.get_article_id_by_slug(_slug varchar(255))
-        RETURNS SETOF TEXT
-        AS $$
-BEGIN
-        RETURN QUERY
-        SELECT
-                article_id
-        FROM
-                real_medium.articles
-        WHERE
-                slug = _slug;
-END;
-$$
-LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION real_medium.delete_article_by_slug(_slug varchar(255), _user_id text)
-        RETURNS SETOF TEXT
-        AS $$
-BEGIN
-        RETURN QUERY DELETE FROM real_medium.articles
-        WHERE slug = _slug
-                AND user_id = _user_id
-        RETURNING
-                article_id;
-END;
-$$
-LANGUAGE plpgsql;
-
 CREATE OR REPLACE FUNCTION real_medium.get_articles_by_filters(_user_id text = NULL, _tag text = NULL, _author text = NULL, _favorited text = NULL, _limit int = 20, _offset int = 0)
         RETURNS SETOF real_medium.tagged_article_with_author_profile
         AS $$

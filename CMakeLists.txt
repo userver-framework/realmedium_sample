@@ -73,6 +73,7 @@ add_google_tests(${PROJECT_NAME}_unittest)
 # Functional Tests
 userver_testsuite_add_simple(
   REQUIREMENTS ${CMAKE_CURRENT_SOURCE_DIR}/tests/requirements.txt
+  SQL_LIBRARY ${PROJECT_NAME}_sql
 )
 
 # Install

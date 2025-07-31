@@ -1,1 +1,3 @@
-SELECT real_medium.delete_article_by_slug($1, $2)
+DELETE FROM real_medium.articles
+WHERE slug = $1 AND user_id = $2
+RETURNING article_id

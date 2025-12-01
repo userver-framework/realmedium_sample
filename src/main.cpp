@@ -45,6 +45,7 @@ int main(int argc, char* argv[]) {
                               .Append<userver::components::TestsuiteSupport>()
                               .Append<real_medium::cache::articles_cache::ArticlesCache>()
                               .Append<real_medium::cache::comments_cache::CommentsCache>()
+                              .Append<userver::components::HttpClientCore>()
                               .Append<userver::components::HttpClient>()
                               .Append<userver::components::Postgres>("realmedium-database")
                               .Append<userver::clients::dns::Component>()  // real_medium::handlers::users_login::post

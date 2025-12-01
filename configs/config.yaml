@@ -60,6 +60,8 @@ components_manager:
 
         http-client:
             load-enabled: $is_testing
+        http-client-core:
+            load-enabled: $is_testing
             fs-task-processor: fs-task-processor
 
         dns-client:

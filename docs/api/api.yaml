@@ -379,8 +379,10 @@ components:
           type: string
         bio:
           type: string
+          nullable: true
         image:
           type: string
+          nullable: true
         following:
           type: boolean
       required:

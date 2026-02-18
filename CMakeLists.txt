@@ -78,7 +78,6 @@ userver_testsuite_add_simple(
 
 # Install
 include(GNUInstallDirs)
-
 if(DEFINED ENV{PREFIX})
     message(STATUS "Set install prefix: $ENV{PREFIX}")
     file(TO_CMAKE_PATH "$ENV{PREFIX}" PREFIX_PATH)

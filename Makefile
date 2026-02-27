@@ -75,6 +75,10 @@ dist-clean:
 # Install
 .PHONY: install-debug install-release
 install-debug install-release: install-%: build-%
+	cmake --install build_$* -v --component realmedium_sample
+
+.PHONY: install-prefixed-debug install-prefixed-release
+install-prefixed-debug install-prefixed-release: install-prefixed-%: build-%
 	cmake --install build_$* -v --component realmedium_sample --prefix /home/user/.local
 
 .PHONY: install
@@ -90,8 +94,8 @@ format:
 export DB_CONNECTION := postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@service-postgres:5432/${POSTGRES_DB}
 
 # Internal hidden targets that are used only in docker environment
---in-docker-start-debug --in-docker-start-release: --in-docker-start-%: install-%
- 	mkdir -p ./postgresql/data
+--in-docker-start-debug --in-docker-start-release: --in-docker-start-%: install-prefixed-%
+	mkdir -p ./postgresql/data
 	touch ./postgresql/data/initial_data.sql
 	psql ${DB_CONNECTION} -f ./postgresql/data/initial_data.sql
 	/home/user/.local/bin/realmedium_sample \

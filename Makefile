@@ -91,7 +91,7 @@ export DB_CONNECTION := postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@servi
 
 # Internal hidden targets that are used only in docker environment
 --in-docker-start-debug --in-docker-start-release: --in-docker-start-%: install-%
- 	mkdir -p ./postgresql/data
+	mkdir -p ./postgresql/data
 	touch ./postgresql/data/initial_data.sql
 	psql ${DB_CONNECTION} -f ./postgresql/data/initial_data.sql
 	/home/user/.local/bin/realmedium_sample \

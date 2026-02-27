@@ -75,7 +75,7 @@ dist-clean:
 # Install
 .PHONY: install-debug install-release
 install-debug install-release: install-%: build-%
-	cmake --install build_$* -v --component realmedium_sample
+	cmake --install build_$* -v --component realmedium_sample --prefix /home/user/.local
 
 .PHONY: install
 install: install-release
@@ -91,9 +91,11 @@ export DB_CONNECTION := postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@servi
 
 # Internal hidden targets that are used only in docker environment
 --in-docker-start-debug --in-docker-start-release: --in-docker-start-%: install-%
+ 	mkdir -p ./postgresql/data
+	touch ./postgresql/data/initial_data.sql
 	psql ${DB_CONNECTION} -f ./postgresql/data/initial_data.sql
 	/home/user/.local/bin/realmedium_sample \
-		--config /home/user/.local/etc/realmedium_sample/static_config.yaml \
+		--config /home/user/.local/etc/realmedium_sample/config.yaml \
 		--config_vars /home/user/.local/etc/realmedium_sample/config_vars.docker.yaml
 
 # Build and run service in docker environment

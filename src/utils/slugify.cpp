@@ -27,7 +27,7 @@ std::string Slugify(const std::string& str) {
         status
     )};
     if (status != U_ZERO_ERROR) {
-        throw std::runtime_error(fmt::format("icu::Transliterator::createFromRules failed with status {}", status));
+        throw std::runtime_error(fmt::format("icu::Transliterator::createFromRules failed with status {}", static_cast<int32_t>(status)));
     }
     auto unicode_str = icu::UnicodeString::fromUTF8(str);
     transliterator->transliterate(unicode_str);

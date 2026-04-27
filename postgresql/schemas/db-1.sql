@@ -192,14 +192,7 @@ END;
 $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION real_medium.create_article(_title varchar(255), _slug varchar(255), _body text, _description text, _user_id text, _tags varchar(255)[])
-        RETURNS text
-        AS $$
-BEGIN
-        RETURN real_medium.create_article_v1(_title, _slug, _body, _description, _user_id, _tags);
-END;
-$$
-LANGUAGE plpgsql;
+
 
 CREATE OR REPLACE FUNCTION real_medium.is_favorited_article(_article_id text, _user_id text = NULL)
         RETURNS bool
@@ -268,18 +261,7 @@ END;
 $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION real_medium.get_article_with_author_profile(_article_id text, _follower_id text = NULL)
-        RETURNS SETOF real_medium.tagged_article_with_author_profile
-        AS $$
-BEGIN
-        RETURN QUERY
-        SELECT
-                *
-        FROM
-                real_medium.get_article_with_author_profile_v1(_article_id, _follower_id);
-END;
-$$
-LANGUAGE plpgsql;
+
 
 CREATE OR REPLACE FUNCTION real_medium.get_article_with_author_profile_by_slug_v1(_slug varchar(255), _follower_id text = NULL)
         RETURNS SETOF real_medium.tagged_article_with_author_profile
@@ -318,18 +300,7 @@ END;
 $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION real_medium.get_article_with_author_profile_by_slug(_slug varchar(255), _follower_id text = NULL)
-        RETURNS SETOF real_medium.tagged_article_with_author_profile
-        AS $$
-BEGIN
-        RETURN QUERY
-        SELECT
-                *
-        FROM
-                real_medium.get_article_with_author_profile_by_slug_v1(_slug, _follower_id);
-END;
-$$
-LANGUAGE plpgsql;
+
 
 CREATE OR REPLACE FUNCTION real_medium.get_feed_articles(_user_id text, _limit int = 20, _offset int = 0)
         RETURNS SETOF real_medium.tagged_article_with_author_profile

@@ -3,13 +3,15 @@ import sys
 
 import pytest
 
-from pytest_userver.plugins import coverage
 from testsuite.databases.pgsql import discover
 
 sys.path.append(os.path.join(os.path.dirname(__file__), 'helpers'))
 
 
-pytest_plugins = ['pytest_userver.plugins.postgresql']
+pytest_plugins = [
+    'pytest_userver.plugins.postgresql',
+    'pytest_userver.plugins.sql_coverage',
+]
 
 
 @pytest.fixture(scope='session')

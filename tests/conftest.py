@@ -21,10 +21,8 @@ def pgsql_local(service_source_dir, pgsql_local_create):
     return pgsql_local_create(list(databases.values()))
 
 
-# SQL_LIBRARY parameter passed to CMake functions `userver_testsuite_add_simple` or
-# `userver_testsuite_add` automatically add SQL coverage tests:
-# 
-# userver/testsuite/pytest_plugins/pytest_userver/plugins/sql_coverage.py PASSED
+# SQL_LIBRARY parameter passed to CMake `userver_testsuite_add_simple`
+# or `userver_testsuite_add` automatically add SQL coverage tests.
 @pytest.fixture
 def on_uncovered():
     """

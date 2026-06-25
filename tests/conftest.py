@@ -3,7 +3,6 @@ import sys
 
 import pytest
 
-from pytest_userver.plugins import coverage
 from testsuite.databases.pgsql import discover
 
 sys.path.append(os.path.join(os.path.dirname(__file__), 'helpers'))
@@ -22,6 +21,8 @@ def pgsql_local(service_source_dir, pgsql_local_create):
     return pgsql_local_create(list(databases.values()))
 
 
+# SQL_LIBRARY parameter passed to CMake `userver_testsuite_add_simple`
+# or `userver_testsuite_add` automatically add SQL coverage tests.
 @pytest.fixture
 def on_uncovered():
     """

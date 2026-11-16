@@ -3,7 +3,7 @@ version: "2.3"
 services:
     postgres:
         container_name: service-postgres
-        image: postgres:12
+        image: postgres:18
         environment:
           - POSTGRES_DB=realmedium_db-1
           - POSTGRES_USER=user

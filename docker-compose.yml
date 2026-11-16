@@ -3,7 +3,7 @@ version: "2.3"
 services:
     postgres:
         container_name: service-postgres
-        image: postgres:12
+        image: postgres:18
         environment:
           - POSTGRES_DB=realmedium_db-1
           - POSTGRES_USER=user
@@ -17,7 +17,7 @@ services:
           - postgres
 
     realmedium-sample:
-        image: ghcr.io/userver-framework/ubuntu-22.04-userver-pg:latest
+        image: ghcr.io/userver-framework/ubuntu-24.04-userver:latest
         privileged: true
         environment:
           - POSTGRES_DB=realmedium_db-1

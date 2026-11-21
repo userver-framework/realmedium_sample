@@ -8,17 +8,26 @@ This codebase was created to demonstrate a fully fledged backend application bui
 
 ### Prerequisites
 
-[Install the userver](https://userver.tech/de/dab/md_en_2userver_2build_2build.html#ways_to_get_userver) into the system
-or
-* check it out `git clone --depth 1 https://github.com/userver-framework/userver.git /path/to/userver`
-* install all of its dependencies
-* `ln -s /path/to/userver /path/to/realmedioum_sample/third_party/userver`
+Use a version of userver that provides `<userver/crypto/jwt.hpp>`.
+[Install userver](https://userver.tech/de/dab/md_en_2userver_2build_2build.html#ways_to_get_userver) into the system
+or clone it from the repository root and install its dependencies:
+
+```
+git clone --branch develop --depth 1 https://github.com/userver-framework/userver.git third_party/userver
+```
+
+The `jwt` component reads its HS256 secret from `REALMEDIUM_JWT_SECRET` at
+startup. It requires at least 32 bytes. Generate a key once for local use:
+
+```sh
+export REALMEDIUM_JWT_SECRET="$(openssl rand -hex 32)"
+```
+
+Keep the same secret across restarts and replicas. Users with tokens signed
+with the previous sample key must log in again.
 
 ### Docker-compose
 ```
-# Clone submodules
-git submodule update --init
-
 # Run service
 make docker-start-service-release
 ```

@@ -2,14 +2,14 @@
 
 #include <userver/storages/postgres/cluster.hpp>
 
-#include "handlers/common.hpp"
+#include "handlers/users/user_handler_base.hpp"
 
 namespace real_medium::handlers::users::post {
 
-class RegisterUser final : public Common {
+class RegisterUser final : public UserHandlerBase {
 public:
     static constexpr std::string_view kName = "handler-register-user";
-    using Common::Common;
+    using UserHandlerBase::UserHandlerBase;
     userver::formats::json::Value HandleRequestJsonThrow(
         const userver::server::http::HttpRequest& request,
         const userver::formats::json::Value& request_json,

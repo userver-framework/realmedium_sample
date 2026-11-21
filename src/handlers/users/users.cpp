@@ -47,9 +47,7 @@ userver::formats::json::Value RegisterUser::
         return utils::error::MakeError(ex.GetServerMessage().GetConstraint(), ex.GetServerMessage().GetDetail());
     }
 
-    userver::formats::json::ValueBuilder builder;
-    builder["user"] = result_user;
-    return builder.ExtractValue();
+    return MakeUserResponseWithToken(result_user);
 }
 
 }  // namespace real_medium::handlers::users::post

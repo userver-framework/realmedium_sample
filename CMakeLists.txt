@@ -21,11 +21,6 @@ endif()
 
 userver_setup_environment()
 
-
-set(CPP_JWT_BUILD_TESTS OFF)
-set(CPP_JWT_BUILD_EXAMPLES OFF)
-add_subdirectory(third_party/cpp-jwt)
-
 # Common sources
 file(GLOB_RECURSE SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.[hc]pp)
 file(GLOB_RECURSE UNIT_TEST_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/*_test.cpp)
@@ -55,8 +50,6 @@ userver_add_sql_library(
     SQL_FILES src/db/*.sql
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC ${PROJECT_NAME}_sql)
-
-target_link_libraries(${PROJECT_NAME}_objs PUBLIC cpp-jwt)
 
 find_package(ICU COMPONENTS uc i18n REQUIRED)
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC ICU::uc ICU::i18n)

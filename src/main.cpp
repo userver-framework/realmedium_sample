@@ -7,6 +7,7 @@
 #include <userver/testsuite/testsuite_support.hpp>
 #include <userver/utils/daemon_run.hpp>
 
+#include "auth/jwt.hpp"
 #include "handlers/auth/auth_bearer.hpp"
 
 #include "handlers/profiles/profiles.hpp"
@@ -43,6 +44,7 @@ int main(int argc, char* argv[]) {
     auto component_list = userver::components::MinimalServerComponentList()
                               .Append<userver::server::handlers::Ping>()
                               .Append<userver::components::TestsuiteSupport>()
+                              .Append<real_medium::auth::Jwt>()
                               .Append<real_medium::cache::articles_cache::ArticlesCache>()
                               .Append<real_medium::cache::comments_cache::CommentsCache>()
                               .AppendComponentList(userver::clients::http::ComponentList())

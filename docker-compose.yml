@@ -23,6 +23,7 @@ services:
           - POSTGRES_DB=realmedium_db-1
           - POSTGRES_USER=user
           - POSTGRES_PASSWORD=password
+          - REALMEDIUM_JWT_SECRET
           - PREFIX=${PREFIX:-~/.local}
           - CC
           - CCACHE_DIR=/realmedium/.ccache

@@ -30,8 +30,6 @@ jobs:
 
         steps:
           - uses: actions/checkout@v7
-            with:
-                submodules: true
 
           - name: Reuse ccache directory
             uses: actions/cache@v6
@@ -44,7 +42,7 @@ jobs:
 
           - name: Install packages
             run: |
-                (cd third_party && git clone -b develop --single-branch --depth 1 https://github.com/userver-framework/userver.git)
+                git clone -b develop --single-branch --depth 1 https://github.com/userver-framework/userver.git third_party/userver
                 sudo apt update
                 sudo apt install --allow-downgrades -y pycodestyle postgresql $(cat third_party/userver/scripts/docs/en/deps/${{matrix.os}}.md | tr '\n' ' ')
    
@@ -83,6 +81,7 @@ jobs:
           - name: Test run after install
             if: matrix.make == 'test-release'
             run: |
+               export REALMEDIUM_JWT_SECRET="$(openssl rand -hex 32)"
                ./local_installation/bin/realmedium_sample \
                    --config=./local_installation/etc/realmedium_sample/config.yaml \
                    --config_vars=./local_installation/etc/realmedium_sample/config_vars.yaml \

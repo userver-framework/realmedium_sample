@@ -7,7 +7,7 @@
 #include <userver/storages/postgres/component.hpp>
 
 #include "db/sql.hpp"
-#include "handlers/common.hpp"
+#include "handlers/users/user_handler_base.hpp"
 #include "models/user.hpp"
 #include "utils/errors.hpp"
 #include "validators/validators.hpp"
@@ -16,11 +16,11 @@ namespace real_medium::handlers::users_login::post {
 
 namespace {
 
-class LoginUser final : public Common {
+class LoginUser final : public UserHandlerBase {
 public:
     static constexpr std::string_view kName = "handler-login-user";
 
-    using Common::Common;
+    using UserHandlerBase::UserHandlerBase;
 
     userver::formats::json::Value
     HandleRequestJsonThrow(const userver::server::http::HttpRequest& request, const userver::formats::json::Value& request_json, userver::server::request::RequestContext&)
@@ -60,10 +60,7 @@ public:
 
         auto user = user_result.AsSingleRow<models::User>(userver::storages::postgres::kRowTag);
 
-        userver::formats::json::ValueBuilder response;
-        response["user"] = user;
-
-        return response.ExtractValue();
+        return MakeUserResponseWithToken(user);
     }
 };
 

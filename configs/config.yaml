@@ -76,6 +76,9 @@ components_manager:
             throttling_enabled: false
             url_trailing_slash: strict-match
 
+        jwt:
+            secret#env: REALMEDIUM_JWT_SECRET
+
         realmedium-database:
             dbconnection: $dbconnection
             dbconnection#env: DB_CONNECTION

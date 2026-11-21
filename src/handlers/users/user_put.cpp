@@ -46,10 +46,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
 
     auto user_result_data = result.AsSingleRow<real_medium::models::User>(userver::storages::postgres::kRowTag);
 
-    userver::formats::json::ValueBuilder builder;
-    builder["user"] = user_result_data;
-
-    return builder.ExtractValue();
+    return MakeUserResponseWithToken(user_result_data);
 }
 
 }  // namespace real_medium::handlers::users::put

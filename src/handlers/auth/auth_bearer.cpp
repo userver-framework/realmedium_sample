@@ -1,9 +1,13 @@
 #include "auth_bearer.hpp"
+#include "auth/jwt.hpp"
 #include "db/sql.hpp"
-#include "utils/jwt.hpp"
 
-#include <algorithm>
+#include <optional>
+#include <string>
+#include <string_view>
+#include <utility>
 
+#include <userver/components/component_context.hpp>
 #include <userver/http/common_headers.hpp>
 #include <userver/storages/postgres/cluster.hpp>
 #include <userver/storages/postgres/component.hpp>
@@ -14,8 +18,8 @@ class AuthCheckerBearer final : public userver::server::handlers::auth::AuthChec
 public:
     using AuthCheckResult = userver::server::handlers::auth::AuthCheckResult;
 
-    AuthCheckerBearer(userver::storages::postgres::ClusterPtr pg_cluster, bool is_required)
-        : pg_cluster_(std::move(pg_cluster)), is_required_(is_required) {}
+    AuthCheckerBearer(userver::storages::postgres::ClusterPtr pg_cluster, const Jwt& jwt, bool is_required)
+        : pg_cluster_(std::move(pg_cluster)), jwt_(jwt), is_required_(is_required) {}
 
     [[nodiscard]] AuthCheckResult CheckAuth(
         const userver::server::http::HttpRequest& request,
@@ -26,6 +30,7 @@ public:
 
 private:
     userver::storages::postgres::ClusterPtr pg_cluster_;
+    const Jwt& jwt_;
     const bool is_required_;
 };
 
@@ -52,15 +57,13 @@ AuthCheckerBearer::AuthCheckResult AuthCheckerBearer::CheckAuth(
         return AuthCheckResult{
             AuthCheckResult::Status::kTokenNotFound,
             {},
-            "'Authorization' header should have 'Bearer some-token' format",
+            "'Authorization' header should have 'Token some-token' format",
             userver::server::handlers::HandlerErrorCode::kUnauthorized
         };
     }
-    std::string_view token{auth_value.c_str() + bearer_sep_pos + 1};
-    jwt::jwt_payload payload;
-    try {
-        payload = utils::jwt::DecodeJWT(token);
-    } catch (...) {
+    const auto token = std::string_view{auth_value}.substr(bearer_sep_pos + 1);
+    auto id = jwt_.VerifyUserId(token);
+    if (!id) {
         return AuthCheckResult{
             AuthCheckResult::Status::kTokenNotFound,
             {},
@@ -68,9 +71,8 @@ AuthCheckerBearer::AuthCheckResult AuthCheckerBearer::CheckAuth(
             userver::server::handlers::HandlerErrorCode::kUnauthorized
         };
     }
-    auto id = payload.get_claim_value<std::string>("id");
 
-    const auto res = pg_cluster_->Execute(userver::storages::postgres::ClusterHostType::kSlave, sql::kFindUserById, id);
+    const auto res = pg_cluster_->Execute(userver::storages::postgres::ClusterHostType::kSlave, sql::kFindUserById, *id);
     if (res.IsEmpty()) {
         return AuthCheckResult{
             AuthCheckResult::Status::kTokenNotFound,
@@ -80,18 +82,19 @@ AuthCheckerBearer::AuthCheckResult AuthCheckerBearer::CheckAuth(
         };
     }
 
-    request_context.SetData("id", std::optional<std::string>(id));
+    request_context.SetData("id", std::move(id));
     return {};
 }
 
 CheckerFactory::CheckerFactory(const userver::components::ComponentContext& context)
-    : pg_cluster_(context.FindComponent<userver::components::Postgres>("realmedium-database").GetCluster()) {}
+    : pg_cluster_(context.FindComponent<userver::components::Postgres>("realmedium-database").GetCluster()),
+      jwt_(context.FindComponent<Jwt>()) {}
 
 userver::server::handlers::auth::AuthCheckerBasePtr CheckerFactory::MakeAuthChecker(
     const userver::server::handlers::auth::HandlerAuthConfig& auth_config
 ) const {
     auto is_required = auth_config["required"].As<bool>(false);
-    return std::make_shared<AuthCheckerBearer>(pg_cluster_, is_required);
+    return std::make_shared<AuthCheckerBearer>(pg_cluster_, jwt_, is_required);
 }
 
 }  // namespace real_medium::auth

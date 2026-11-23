@@ -5,6 +5,8 @@
 
 namespace real_medium::auth {
 
+class Jwt;
+
 class CheckerFactory final : public userver::server::handlers::auth::AuthCheckerFactoryBase {
 public:
     static constexpr std::string_view kAuthType = "bearer";
@@ -16,6 +18,7 @@ public:
 
 private:
     userver::storages::postgres::ClusterPtr pg_cluster_;
+    const Jwt& jwt_;
 };
 
 }  // namespace real_medium::auth

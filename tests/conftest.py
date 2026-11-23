@@ -1,4 +1,5 @@
 import os
+import secrets
 import sys
 
 import pytest
@@ -9,6 +10,14 @@ sys.path.append(os.path.join(os.path.dirname(__file__), 'helpers'))
 
 
 pytest_plugins = ['pytest_userver.plugins.postgresql']
+
+
+@pytest.fixture(scope='session')
+def service_env(service_env):
+    secret = os.environ.get('REALMEDIUM_JWT_SECRET')
+    if secret is None:
+        secret = secrets.token_hex(32)
+    return {**service_env, 'REALMEDIUM_JWT_SECRET': secret}
 
 
 @pytest.fixture(scope='session')

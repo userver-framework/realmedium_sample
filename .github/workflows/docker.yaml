@@ -18,8 +18,6 @@ jobs:
         runs-on: ubuntu-latest
         steps:
           - uses: actions/checkout@v7
-            with:
-                submodules: true
 
           - name: Reuse ccache directory
             uses: actions/cache@v6
